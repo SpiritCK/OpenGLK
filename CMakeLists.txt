@@ -9,13 +9,23 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
-add_executable(tugas01
-        tugas01/src/main.cpp
+add_executable(tutorial01
+        tutorial01/main.cpp
+        )
+        
+add_executable(example01
+        example01/src/main.cpp
         commons/shader.cpp
         commons/shader.hpp
         )
 
-target_link_libraries(tugas01
+target_link_libraries(tutorial01
+        ${OPENGL_LIBRARY}
+        glfw
+        ${GLEW_LIBRARY}
+        )
+
+target_link_libraries(example01
         ${OPENGL_LIBRARY}
         glfw
         ${GLEW_LIBRARY}

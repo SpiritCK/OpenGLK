@@ -7,8 +7,8 @@ using namespace std;
 #define WINDOW_WIDTH 1024
 #define WINDOW_HEIGHT 712
 #define WINDOW_TITLE "Hello triangle"
-#define VERTEX_SHADER_FILE_PATH  "triangle/shaders/vertex_shader.glsl"
-#define FRAGMENT_SHADER_FILE_PATH "triangle/shaders/fragment_shader.glsl"
+#define VERTEX_SHADER_FILE_PATH  "example01/shaders/vertex_shader.glsl"
+#define FRAGMENT_SHADER_FILE_PATH "example01/shaders/fragment_shader.glsl"
 
 void error_callback(int error, const char * description) {
     cout << description << endl;
