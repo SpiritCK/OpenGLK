@@ -16,6 +16,14 @@ add_executable(tugas01
         common/shader.hpp
         )
         
+add_executable(tugas02
+        tugas02/main.cpp
+        common/shader.cpp
+        common/shader.hpp
+        common/shape.cpp
+        common/shape.h
+        )
+        
 add_executable(tutorial01
         tutorial01/main.cpp
         )
@@ -27,6 +35,12 @@ add_executable(example01
         )
 
 target_link_libraries(tugas01
+        ${OPENGL_LIBRARY}
+        glfw
+        ${GLEW_LIBRARY}
+        )
+
+target_link_libraries(tugas02
         ${OPENGL_LIBRARY}
         glfw
         ${GLEW_LIBRARY}
