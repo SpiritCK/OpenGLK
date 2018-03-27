@@ -292,9 +292,9 @@ int main( void )
     glDrawElements(GL_TRIANGLES, segments[2].second, GL_UNSIGNED_INT, (void*)(segments[2].first*sizeof(GLuint)));
 
     //activate transformation
-    transform1 = glm::translate(transform1, glm::vec3(-0.45f, -0.05f, 0));
+    transform1 = glm::translate(transform1, glm::vec3(-0.33f, -0.1f, 0));
     transform1 = glm::rotate(transform1, (float)glfwGetTime()*(-2), glm::vec3(0.0f, 0.0f, 1.0f));
-    transform1 = glm::translate(transform1, glm::vec3(0.45f, 0.05f, 0));
+    transform1 = glm::translate(transform1, glm::vec3(0.33f, 0.1f, 0));
     transformLoc = glGetUniformLocation(shaderProgram, "transform");
     glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform1));
 
@@ -302,9 +302,9 @@ int main( void )
     glDrawElements(GL_TRIANGLE_FAN, segments[3].second, GL_UNSIGNED_INT, (void*)(segments[3].first*sizeof(GLuint)));
 
     //activate transformation
-    transform2 = glm::translate(transform2, glm::vec3(0.5f, -0.05f, -1.0f));
+    transform2 = glm::translate(transform2, glm::vec3(0.33f, -0.1f, -1.0f));
     transform2 = glm::rotate(transform2, (float)glfwGetTime()*(-2), glm::vec3(0.0f, 0.0f, 1.0f));
-    transform2 = glm::translate(transform2, glm::vec3(-0.5f, 0.05f, 1.0f));
+    transform2 = glm::translate(transform2, glm::vec3(-0.33f, 0.1f, 1.0f));
     transformLoc = glGetUniformLocation(shaderProgram, "transform");
     glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform2));
     
