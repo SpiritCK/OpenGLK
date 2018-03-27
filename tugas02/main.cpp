@@ -1,6 +1,7 @@
 // Include standard headers
 #include <stdio.h>
 #include <stdlib.h>
+#include <vector>
 
 // Include GLEW
 #include <GL/glew.h>
@@ -16,13 +17,14 @@ using namespace glm;
 #include <common/shader.hpp>
 #include "common/shape.h"
 
-#define WINDOW_WIDTH 1024
+#define WINDOW_WIDTH 712
 #define WINDOW_HEIGHT 712
 #define WINDOW_TITLE "Running car"
+#define CIRCLE_SIDES 5
 #define VERTEX_SHADER_FILE "tugas02/shader/VertexShader.vsgl"
 #define FRAGMENT_SHADER_FILE "tugas02/shader/FragmentShader.fsgl"
 
-void addCar(GLfloat* &vertices, int &num_vertices, GLuint* &elements, int &num_elements) {
+void addCar(GLfloat* &vertices, int &num_vertices, GLuint* &elements, int &num_elements, std::vector<std::pair<int, int>> &segments) {
   GLfloat carBodyVertices[] = {
       // Car body
       -0.35f,  0.4f,
@@ -45,7 +47,6 @@ void addCar(GLfloat* &vertices, int &num_vertices, GLuint* &elements, int &num_e
       4, 6, 8,
       6, 7, 8
   };
-  GLfloat* carBody = createPolygon(carBodyVertices, 9, 1.0f, 1.0f, 0.0f);
   
   GLfloat carDoorVertices[] = {
       // Car door
@@ -63,7 +64,6 @@ void addCar(GLfloat* &vertices, int &num_vertices, GLuint* &elements, int &num_e
       2, 4, 5,
       2, 3, 4
   };
-  GLfloat* carDoor = createPolygon(carDoorVertices, 6, 0.9f,  0.5f, 0.0f);
   
   GLfloat doorWindowVertices[] = {
       // Door window
@@ -77,11 +77,72 @@ void addCar(GLfloat* &vertices, int &num_vertices, GLuint* &elements, int &num_e
       0, 1, 3,
       1, 2, 3
   };
-  GLfloat* doorWindow = createPolygon(doorWindowVertices, 4, 0.1f, 0.5f, 1.0f);
   
-  addPolygon(vertices, num_vertices, elements, num_elements, carBody, 9, carBodyElements, 7);
-  addPolygon(vertices, num_vertices, elements, num_elements, carDoor, 6, carDoorElements, 4);
-  addPolygon(vertices, num_vertices, elements, num_elements, doorWindow, 4, doorWindowElements, 2);
+  addPolygon(
+      vertices, 
+      num_vertices, 
+      elements, 
+      num_elements, 
+      createPolygon(
+          carBodyVertices, 
+          9, 
+          1.0f, 1.0f, 0.0f), 
+      9, 
+      carBodyElements, 
+      21,
+      segments);
+  addPolygon(
+      vertices, 
+      num_vertices, 
+      elements, 
+      num_elements, 
+      createPolygon(
+          carDoorVertices, 
+          6, 
+          0.9f,  0.5f, 0.0f), 
+      6, 
+      carDoorElements, 
+      12,
+      segments);
+  addPolygon(
+      vertices, 
+      num_vertices, 
+      elements, 
+      num_elements, 
+      createPolygon(
+          doorWindowVertices, 
+          4, 
+          0.1f, 0.5f, 1.0f), 
+      4, 
+      doorWindowElements, 
+      6,
+      segments);
+  addPolygon(
+      vertices, 
+      num_vertices, 
+      elements, 
+      num_elements, 
+      createCircle(
+          -0.45f, -0.05f, 0.15f,
+          0.3f, 0.3f, 0.3f,
+          CIRCLE_SIDES),
+      CIRCLE_SIDES+1,
+      createCircleElements(CIRCLE_SIDES),
+      CIRCLE_SIDES+2,
+      segments);
+  addPolygon(
+      vertices, 
+      num_vertices, 
+      elements, 
+      num_elements, 
+      createCircle(
+          0.5f, -0.05f, 0.15f,
+          0.3f, 0.3f, 0.3f,
+          CIRCLE_SIDES),
+      CIRCLE_SIDES+1,
+      createCircleElements(CIRCLE_SIDES),
+      CIRCLE_SIDES+2,
+      segments);
   
 }
 
@@ -131,69 +192,24 @@ int main( void )
   
   
   //////// Start coding here ////////
-  
-  //// Define data ////
-  /*static const GLfloat vertices[] = {
-      // Car body
-      -0.35f,  0.4f,  1.0f, 1.0f, 0.0f,
-       0.25f,  0.35f, 1.0f, 1.0f, 0.0f,
-       0.5f,   0.2f,  1.0f, 1.0f, 0.0f,
-       0.68f,  0.2f,  1.0f, 1.0f, 0.0f,
-       0.71f,  0.05f, 1.0f, 1.0f, 0.0f,
-       0.71f, -0.05f, 1.0f, 1.0f, 0.0f,
-      -0.75f, -0.05f, 1.0f, 1.0f, 0.0f,
-      -0.8f,   0.2f,  1.0f, 1.0f, 0.0f,
-      -0.4f,   0.2f,  1.0f, 1.0f, 0.0f,
-      
-      // Car door
-      -0.25f,  0.35f, 0.9f, 0.5f, 0.0f,
-       0.22f,  0.31f, 0.9f, 0.5f, 0.0f,
-       0.4f,   0.2f,  0.9f, 0.5f, 0.0f,
-       0.41f,  0.0f,  0.9f, 0.5f, 0.0f,
-      -0.18f,  0.0f,  0.9f, 0.5f, 0.0f,
-      -0.18f,  0.2f,  0.9f, 0.5f, 0.0f,
-      
-      // Door window
-      -0.21f,  0.32f, 0.1f, 0.5f, 1.0f,
-       0.21f,  0.29f, 0.1f, 0.5f, 1.0f,
-       0.38f,  0.2f,  0.1f, 0.5f, 1.0f,
-      -0.16f,  0.2f,  0.1f, 0.5f, 1.0f
-  };
-
-  GLuint elements[] = {
-      // Car body
-      0, 1, 2,
-      0, 2, 8,
-      2, 3, 4,
-      2, 4, 8,
-      4, 5, 6,
-      4, 6, 8,
-      6, 7, 8,
-      
-      // Car door
-      9, 10, 14,
-      10, 11, 14,
-      11, 13, 14,
-      11, 12, 13,
-      
-      // Door window
-      15, 16, 18,
-      16, 17, 18
-  };*/
-  
   GLfloat* vertices = new GLfloat;
   int vertex_num = 0;
   GLuint* elements = new GLuint;
   int elements_num = 0;
+  std::vector<std::pair<int, int>> segments;
   
-  addCar(vertices, vertex_num, elements, elements_num);
-  printf("Num vertex: %d\n", vertex_num);
+  addCar(vertices, vertex_num, elements, elements_num, segments);
+  printf("Vertex num: %d\n", vertex_num);
   for (int i = 0; i < vertex_num; i++) {
-    printf("%.2f %.2f %.2f %.2f %.2f\n", vertices[5*i], vertices[5*i+1], vertices[5*i+2], vertices[5*i+3], vertices[5*i+4]);
+    printf("%d. %.2f %.2f %.2f %.2f %.2f\n", i, vertices[5*i], vertices[5*i+1], vertices[5*i+2], vertices[5*i+3], vertices[5*i+4]);
   }
-  printf("Num element: %d\n", elements_num);
+  printf("Elements num: %d\n", elements_num);
   for (int i = 0; i < elements_num; i++) {
-    printf("%d %d %d\n", elements[3*i], elements[3*i+1], elements[3*i+2]);
+    printf("%d. %d\n", i, elements[i]);
+  }
+  printf("Segments num: %ld\n", segments.size());
+  for (int i = 0; i < segments.size(); i++) {
+    printf("%d. %d %d\n", i, segments[i].first, segments[i].second);
   }
   
   GLuint vertexbuffer;
@@ -204,7 +220,7 @@ int main( void )
   GLuint ebo;
   glGenBuffers(1, &ebo);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements_num * sizeof(GLfloat) * 3, elements, GL_STATIC_DRAW);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements_num * sizeof(GLfloat), elements, GL_STATIC_DRAW);
   
   //// Create and compile our GLSL program from the shaders ////
   GLuint shaderProgram = LoadShaders( VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE );
@@ -222,7 +238,14 @@ glVertexAttribPointer(colAttrib, 3, GL_FLOAT, GL_FALSE,
 	do{
 		glClear(GL_COLOR_BUFFER_BIT);
     glUseProgram(shaderProgram);
-    glDrawElements(GL_TRIANGLES, 13*3, GL_UNSIGNED_INT, 0);
+    //glDrawElements(GL_TRIANGLES, 39, GL_UNSIGNED_INT, 0);
+    //glDrawElements(GL_TRIANGLE_FAN, CIRCLE_SIDES+2, GL_UNSIGNED_INT, (void*)(39*sizeof(GLuint)));
+    
+    glDrawElements(GL_TRIANGLES, segments[0].second, GL_UNSIGNED_INT, (void*)(segments[0].first*sizeof(GLuint)));
+    glDrawElements(GL_TRIANGLES, segments[1].second, GL_UNSIGNED_INT, (void*)(segments[1].first*sizeof(GLuint)));
+    glDrawElements(GL_TRIANGLES, segments[2].second, GL_UNSIGNED_INT, (void*)(segments[2].first*sizeof(GLuint)));
+    glDrawElements(GL_TRIANGLE_FAN, segments[3].second, GL_UNSIGNED_INT, (void*)(segments[3].first*sizeof(GLuint)));
+    glDrawElements(GL_TRIANGLE_FAN, segments[4].second, GL_UNSIGNED_INT, (void*)(segments[4].first*sizeof(GLuint)));
     
 		glfwSwapBuffers(window);
 		glfwPollEvents();
