@@ -12,6 +12,8 @@ GLFWwindow* window;
 
 // Include GLM
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 using namespace glm;
 
 #include <common/shader.hpp>
@@ -226,25 +228,50 @@ int main( void )
   GLuint shaderProgram = LoadShaders( VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE );
   
   GLint posAttrib = glGetAttribLocation(shaderProgram, "pos");
-glEnableVertexAttribArray(posAttrib);
-glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE,
-                       5*sizeof(float), 0);
+  glEnableVertexAttribArray(posAttrib);
+  glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE,
+                         5*sizeof(float), 0);
 
-GLint colAttrib = glGetAttribLocation(shaderProgram, "inColor");
-glEnableVertexAttribArray(colAttrib);
-glVertexAttribPointer(colAttrib, 3, GL_FLOAT, GL_FALSE,
-                       5*sizeof(float), (void*)(2*sizeof(float)));
+  GLint colAttrib = glGetAttribLocation(shaderProgram, "inColor");
+  glEnableVertexAttribArray(colAttrib);
+  glVertexAttribPointer(colAttrib, 3, GL_FLOAT, GL_FALSE,
+                         5*sizeof(float), (void*)(2*sizeof(float)));
 
 	do{
 		glClear(GL_COLOR_BUFFER_BIT);
     glUseProgram(shaderProgram);
     //glDrawElements(GL_TRIANGLES, 39, GL_UNSIGNED_INT, 0);
     //glDrawElements(GL_TRIANGLE_FAN, CIRCLE_SIDES+2, GL_UNSIGNED_INT, (void*)(39*sizeof(GLuint)));
-    
+
+    //create transformation
+    glm:mat4 transform, transform1, transform2;
+    transform = glm::rotate(transform, 0.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+    unsigned int transformLoc = glGetUniformLocation(shaderProgram, "transform");
+    glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
+
+    //draw car's body
     glDrawElements(GL_TRIANGLES, segments[0].second, GL_UNSIGNED_INT, (void*)(segments[0].first*sizeof(GLuint)));
     glDrawElements(GL_TRIANGLES, segments[1].second, GL_UNSIGNED_INT, (void*)(segments[1].first*sizeof(GLuint)));
     glDrawElements(GL_TRIANGLES, segments[2].second, GL_UNSIGNED_INT, (void*)(segments[2].first*sizeof(GLuint)));
+
+    //activate transformation
+    transform1 = glm::translate(transform1, glm::vec3(-0.45f, -0.05f, 0));
+    transform1 = glm::rotate(transform1, (float)glfwGetTime()*(-2), glm::vec3(0.0f, 0.0f, 1.0f));
+    transform1 = glm::translate(transform1, glm::vec3(0.45f, 0.05f, 0));
+    transformLoc = glGetUniformLocation(shaderProgram, "transform");
+    glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform1));
+
+    //draw back tire
     glDrawElements(GL_TRIANGLE_FAN, segments[3].second, GL_UNSIGNED_INT, (void*)(segments[3].first*sizeof(GLuint)));
+
+    //activate transformation
+    transform2 = glm::translate(transform2, glm::vec3(0.5f, -0.05f, -1.0f));
+    transform2 = glm::rotate(transform2, (float)glfwGetTime()*(-2), glm::vec3(0.0f, 0.0f, 1.0f));
+    transform2 = glm::translate(transform2, glm::vec3(-0.5f, 0.05f, 1.0f));
+    transformLoc = glGetUniformLocation(shaderProgram, "transform");
+    glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform2));
+    
+    //draw front tire
     glDrawElements(GL_TRIANGLE_FAN, segments[4].second, GL_UNSIGNED_INT, (void*)(segments[4].first*sizeof(GLuint)));
     
 		glfwSwapBuffers(window);
