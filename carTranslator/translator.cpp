@@ -30,9 +30,10 @@ int main(){
       float convertedX = ((currentX*winWidth/magicNumber)*2/winWidth)-1;
       float convertedY = ((currentY*winWidth/magicNumber)*2/winHeight)-1;
       */
-      float convertedX = (currentX*2/magicNumber);
-      float convertedY = (currentY*2/magicNumber);
-      cout << "       " << convertedX*100 << ", " << convertedY*100 << ",\n";
+      float convertedX = (currentX*2/magicNumber) -1;
+      float convertedY = (((currentY*2/magicNumber) -1)*-1)+0.65;
+      //cout << "from   " << buff.substr(0,buff.find(",")) << "f, " << buff.substr(buff.find(",")+1) << "f,\n";
+      cout << "       " << convertedX << "f, " << convertedY << "f,\n";
     }
     else{
       cout << buff << "\n";
