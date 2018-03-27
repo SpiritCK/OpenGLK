@@ -1,6 +1,7 @@
 // Include standard headers
 #include <stdio.h>
 #include <stdlib.h>
+#include <chrono>
 
 // Include GLEW
 #include <GL/glew.h>
@@ -15,7 +16,7 @@ using namespace glm;
 
 #include <common/shader.hpp>
 
-#define WINDOW_WIDTH 1024
+#define WINDOW_WIDTH 712
 #define WINDOW_HEIGHT 712
 #define WINDOW_TITLE "Hello triangle"
 #define VERTEX_SHADER_FILE "tugas01/shader/VertexShader.vsgl"
@@ -88,14 +89,25 @@ glEnableVertexAttribArray(posAttrib);
 glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE,
                        5*sizeof(float), 0);
 
-GLint colAttrib = glGetAttribLocation(shaderProgram, "inColor");
+  GLint colAttrib = glGetAttribLocation(shaderProgram, "inColor");
 glEnableVertexAttribArray(colAttrib);
 glVertexAttribPointer(colAttrib, 3, GL_FLOAT, GL_FALSE,
                        5*sizeof(float), (void*)(2*sizeof(float)));
+  
+  GLint uniColor = glGetUniformLocation(shaderProgram, "triangleColor");
+  GLint uniAngle = glGetUniformLocation(shaderProgram, "angle");
+  GLint uniOrigin = glGetUniformLocation(shaderProgram, "origin");
+  auto t_start = std::chrono::high_resolution_clock::now();
 
 	do{
 		glClear(GL_COLOR_BUFFER_BIT);
     glUseProgram(shaderProgram);
+    
+    auto t_now = std::chrono::high_resolution_clock::now();
+    float time = std::chrono::duration_cast<std::chrono::duration<float>>(t_now - t_start).count();
+    glUniform3f(uniColor, (sin(time * 4.0f) + 1.0f) / 2.0f, 0.0f, 0.0f);
+    glUniform1f(uniAngle, time*1.0f);
+    glUniform2f(uniOrigin, 1.0f, 0.0f);
     glDrawArrays(GL_TRIANGLES, 0, 3);
     
 		glfwSwapBuffers(window);

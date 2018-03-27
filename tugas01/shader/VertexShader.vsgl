@@ -1,12 +1,25 @@
 #version 330 core
 
+uniform float angle;
+uniform vec2 origin;
 in vec2 pos;
 in vec3 inColor;
 
 out vec3 color;
 
+vec2 rotate(vec2 v, vec2 o, float a) {
+    float s = sin(a);
+    float c = cos(a);
+    vec3 tmp = vec3(v, 1);
+    mat3 m1 = mat3(1, 0, -o.x, 0, 1, -o.y, 0, 0, 1);
+    mat3 m2 = mat3(c, -s, 0, s, c, 0, 0, 0, 1);
+    mat3 m3 = mat3(1, 0, o.x, 0, 1, o.y, 0, 0, 1);
+    vec3 result = m3 * m2 * m1 * tmp;
+    return vec2(result.x, result.y);
+}
+
 void main(){
     color = inColor;
-    gl_Position = vec4(pos, 0.0, 1.0);
+    gl_Position = vec4(rotate(pos, origin, angle) , 0.0, 1.0);
 }
 
