@@ -22,62 +22,99 @@ using namespace glm;
 #define WINDOW_WIDTH 712
 #define WINDOW_HEIGHT 712
 #define WINDOW_TITLE "Running car"
-#define CIRCLE_SIDES 5
+#define CIRCLE_SIDES 13
 #define VERTEX_SHADER_FILE "tugas02/shader/VertexShader.vsgl"
 #define FRAGMENT_SHADER_FILE "tugas02/shader/FragmentShader.fsgl"
 
 void addCar(GLfloat* &vertices, int &num_vertices, GLuint* &elements, int &num_elements, std::vector<std::pair<int, int>> &segments) {
   GLfloat carBodyVertices[] = {
       // Car body
-      -0.35f,  0.4f,
-       0.25f,  0.35f,
-       0.5f,   0.2f,
-       0.68f,  0.2f,
-       0.71f,  0.05f,
-       0.71f, -0.05f,
-      -0.75f, -0.05f,
-      -0.8f,   0.2f,
-      -0.4f,   0.2f
+       -0.66805f, -0.078826f,
+       -0.45326f, -0.0760366f,
+       -0.416996f, 0.0215956f,
+       -0.252416f, 0.0215956f,
+       -0.213363f, -0.0760366f,
+       0.205061f, -0.078826f,
+       0.244113f, 0.0355431f,
+       0.419852f, 0.0383326f,
+       0.456115f, -0.0788259f,
+       0.729485f, -0.0816154f,
+       0.662537f, 0.096912f,
+       0.311061f, 0.155491f,
+       0.129744f, 0.336808f,
+       -0.567629f, 0.334019f
   };
   GLuint carBodyElements[] = {
       // Car body
-      0, 1, 2,
-      0, 2, 8,
-      2, 3, 4,
-      2, 4, 8,
-      4, 5, 6,
-      4, 6, 8,
-      6, 7, 8
+      0, 1, 13,
+      1, 2, 13,
+      2, 3, 13,
+      3, 13, 12,
+      3, 4, 12,
+      4, 5, 12,
+      5, 6, 12,
+      6, 12, 11,
+      6, 7, 11,
+      7, 8, 11,
+      8, 9, 11,
+      9, 10, 11
   };
   
   GLfloat carDoorVertices[] = {
       // Car door
-      -0.25f,  0.35f,
-       0.22f,  0.31f,
-       0.4f,   0.2f,
-       0.41f,  0.0f,
-      -0.18f,  0.0f,
-      -0.18f,  0.2f
+       -0.051036f, 0.30187f,
+       0.113544f, 0.304659f,
+       0.205597f, 0.184711f,
+       0.200018f, 0.0563942f,
+       0.172123f, -0.0356591f,
+       -0.051036f, -0.0356591f,
+       -0.0818158f, 0.302335f,
+       -0.0818158f, -0.0359436f,
+       -0.200164f, -0.0349574f,
+       -0.241586f, 0.05479f,
+       -0.297801f, 0.0567625f,
+       -0.296815f, 0.215546f,
+       -0.262297f, 0.303321f
   };
   GLuint carDoorElements[] = {
       // Car body
-      0, 1, 5,
-      1, 2, 5,
-      2, 4, 5,
-      2, 3, 4
+      0, 1, 2,
+      0, 2, 3,
+      0, 3, 4,
+      0, 4, 5,
+      6, 7, 8,
+      6, 8, 9,
+      6, 9, 10,
+      6, 10, 11,
+      6, 11, 12
   };
   
   GLfloat doorWindowVertices[] = {
       // Door window
-      -0.21f,  0.32f,
-       0.21f,  0.29f,
-       0.38f,  0.2f,
-      -0.16f,  0.2f
+       -0.0344765f, 0.283597f,
+       0.103596f, 0.285569f,
+       0.172633f, 0.188918f,
+       -0.0344764f, 0.19089f,
+       
+       -0.247503f, 0.284583f,
+       -0.0975955f, 0.284583f,
+       -0.0966093f, 0.192863f,
+       -0.28f, 0.192863f,
+       
+       -0.293856f, 0.305294f,
+       -0.344154f, 0.191877f,
+       -0.56f, 0.191877f,
+       -0.54f, 0.305f,
+
   };
   GLuint doorWindowElements[] = {
       // Car body
+      1, 2, 3,
       0, 1, 3,
-      1, 2, 3
+      4, 5, 6,
+      4, 6, 7,
+      8, 9, 11,
+      9, 10,11
   };
   
   addPolygon(
@@ -87,11 +124,11 @@ void addCar(GLfloat* &vertices, int &num_vertices, GLuint* &elements, int &num_e
       num_elements, 
       createPolygon(
           carBodyVertices, 
-          9, 
+          14, 
           1.0f, 1.0f, 0.0f), 
-      9, 
+      14, 
       carBodyElements, 
-      21,
+      36,
       segments);
   addPolygon(
       vertices, 
@@ -100,11 +137,11 @@ void addCar(GLfloat* &vertices, int &num_vertices, GLuint* &elements, int &num_e
       num_elements, 
       createPolygon(
           carDoorVertices, 
-          6, 
+          13, 
           0.9f,  0.5f, 0.0f), 
-      6, 
+      13, 
       carDoorElements, 
-      12,
+      27,
       segments);
   addPolygon(
       vertices, 
@@ -113,11 +150,11 @@ void addCar(GLfloat* &vertices, int &num_vertices, GLuint* &elements, int &num_e
       num_elements, 
       createPolygon(
           doorWindowVertices, 
-          4, 
+          12, 
           0.1f, 0.5f, 1.0f), 
-      4, 
+      12, 
       doorWindowElements, 
-      6,
+      18,
       segments);
   addPolygon(
       vertices, 
@@ -125,7 +162,7 @@ void addCar(GLfloat* &vertices, int &num_vertices, GLuint* &elements, int &num_e
       elements, 
       num_elements, 
       createCircle(
-          -0.45f, -0.05f, 0.15f,
+          -0.33f, -0.1f, 0.12f,
           0.3f, 0.3f, 0.3f,
           CIRCLE_SIDES),
       CIRCLE_SIDES+1,
@@ -138,7 +175,7 @@ void addCar(GLfloat* &vertices, int &num_vertices, GLuint* &elements, int &num_e
       elements, 
       num_elements, 
       createCircle(
-          0.5f, -0.05f, 0.15f,
+          0.33f, -0.1f, 0.12f,
           0.3f, 0.3f, 0.3f,
           CIRCLE_SIDES),
       CIRCLE_SIDES+1,
