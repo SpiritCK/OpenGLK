@@ -25,6 +25,7 @@ public:
   Polygon() {}
   Polygon(int n, int* a);
   void addPolygon(GLfloat* arr, int num_of_point, GLuint* ele, int num_of_ele, GLfloat r, GLfloat g, GLfloat b);
+  void addPolygon(GLfloat* arr, int num_of_point, GLuint* ele, int num_of_ele, GLfloat* col);
   void addCircle(GLfloat x, GLfloat y, GLfloat r, GLfloat color_r, GLfloat color_g, GLfloat color_b, int n);
   
   GLfloat* getArrays();

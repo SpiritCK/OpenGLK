@@ -19,13 +19,14 @@ using namespace glm;
 #include <common/shader.hpp>
 #include "common/polygon.h"
 
-#define WINDOW_WIDTH 712
-#define WINDOW_HEIGHT 712
-#define WINDOW_TITLE "Running car"
+#define WINDOW_WIDTH 1024
+#define WINDOW_HEIGHT 768
+#define WINDOW_TITLE "Colored cube"
 #define CIRCLE_SIDES 13
 #define VERTEX_SHADER_FILE "tugas02_test/shader/VertexShader.vsgl"
 #define FRAGMENT_SHADER_FILE "tugas02_test/shader/FragmentShader.fsgl"
 
+/*
 void addCar(Polygon &p) {
   GLfloat carBodyVertices[] = {
       // Car body
@@ -151,6 +152,107 @@ void addCar(Polygon &p) {
   printf("B6\n");
   
 }
+*/
+
+void addCube(Polygon &p) {
+  GLfloat vertices[] = {
+    -1.0f,-1.0f,-1.0f,
+		-1.0f,-1.0f, 1.0f,
+		-1.0f, 1.0f, 1.0f,  //1*/
+		 1.0f, 1.0f,-1.0f,
+		-1.0f,-1.0f,-1.0f,
+		-1.0f, 1.0f,-1.0f,  //2
+		 1.0f,-1.0f, 1.0f,
+		-1.0f,-1.0f,-1.0f,
+		 1.0f,-1.0f,-1.0f,  //3
+		 1.0f, 1.0f,-1.0f,
+		 1.0f,-1.0f,-1.0f,
+		-1.0f,-1.0f,-1.0f,  //4
+		-1.0f,-1.0f,-1.0f,
+		-1.0f, 1.0f, 1.0f,
+		-1.0f, 1.0f,-1.0f,  //5
+		 1.0f,-1.0f, 1.0f,
+		-1.0f,-1.0f, 1.0f,
+		-1.0f,-1.0f,-1.0f,  //6
+		-1.0f, 1.0f, 1.0f,
+		-1.0f,-1.0f, 1.0f,
+		 1.0f,-1.0f, 1.0f,  //7
+		 1.0f, 1.0f, 1.0f,
+		 1.0f,-1.0f,-1.0f,
+		 1.0f, 1.0f,-1.0f,  //8
+		 1.0f,-1.0f,-1.0f,
+		 1.0f, 1.0f, 1.0f,
+		 1.0f,-1.0f, 1.0f,  //9
+		 1.0f, 1.0f, 1.0f,
+		 1.0f, 1.0f,-1.0f,
+		-1.0f, 1.0f,-1.0f,  //10
+		 1.0f, 1.0f, 1.0f,
+		-1.0f, 1.0f,-1.0f,
+		-1.0f, 1.0f, 1.0f,  //11
+		 1.0f, 1.0f, 1.0f,
+		-1.0f, 1.0f, 1.0f,
+		 1.0f,-1.0f, 1.0f   //12
+  };
+  GLuint elements[] = {
+    0,  1,  2, 
+    3,  4,  5, 
+    6,  7,  8, 
+    9,  10, 11,
+    12, 13, 14,
+    15, 16, 17,
+    18, 19, 20,
+    21, 22, 23,
+    24, 25, 26,
+    27, 28, 29,
+    30, 31, 32,
+    33, 34, 35
+  };
+  GLfloat colors[] = {
+    0.583f,  0.771f,  0.014f,
+		0.609f,  0.115f,  0.436f,
+		0.327f,  0.483f,  0.844f,  //1*/
+		0.822f,  0.569f,  0.201f,
+		0.435f,  0.602f,  0.223f,
+		0.310f,  0.747f,  0.185f,  //2
+		0.597f,  0.770f,  0.761f,
+		0.559f,  0.436f,  0.730f,
+		0.359f,  0.583f,  0.152f,  //3
+		0.483f,  0.596f,  0.789f,
+		0.559f,  0.861f,  0.639f,
+		0.195f,  0.548f,  0.859f,  //4
+		0.014f,  0.184f,  0.576f,
+		0.771f,  0.328f,  0.970f,
+		0.406f,  0.615f,  0.116f,  //5
+		0.676f,  0.977f,  0.133f,
+		0.971f,  0.572f,  0.833f,
+		0.140f,  0.616f,  0.489f,  //6
+		0.997f,  0.513f,  0.064f,
+		0.945f,  0.719f,  0.592f,
+		0.543f,  0.021f,  0.978f,  //7
+		0.279f,  0.317f,  0.505f,
+		0.167f,  0.620f,  0.077f,
+		0.347f,  0.857f,  0.137f,  //8
+		0.055f,  0.953f,  0.042f,
+		0.714f,  0.505f,  0.345f,
+		0.783f,  0.290f,  0.734f,  //9
+		0.722f,  0.645f,  0.174f,
+		0.302f,  0.455f,  0.848f,
+		0.225f,  0.587f,  0.040f,  //10
+		0.517f,  0.713f,  0.338f,
+		0.053f,  0.959f,  0.120f,
+		0.393f,  0.621f,  0.362f,  //11
+		0.673f,  0.211f,  0.457f,
+		0.820f,  0.883f,  0.371f,
+		0.982f,  0.099f,  0.879f   //12*/
+  };
+
+  p.addPolygon(
+      vertices, 
+      sizeof(vertices) / sizeof(GLfloat) / 3, 
+      elements, 
+      sizeof(elements) / sizeof(GLuint),
+      colors);
+}
 
 int main( void )
 {
@@ -162,6 +264,7 @@ int main( void )
 		return -1;
 	}
 
+	glfwWindowHint(GLFW_SAMPLES, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
@@ -189,7 +292,10 @@ int main( void )
 	// Ensure we can capture the escape key being pressed below
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+	
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS); 
 	
 	GLuint VertexArrayID;
   glGenVertexArrays(1, &VertexArrayID);
@@ -198,32 +304,15 @@ int main( void )
   
   
   //////// Start coding here ////////
-  int dimension[5] = {Polygon::POS_X, Polygon::POS_Y, Polygon::COLOR_R, Polygon::COLOR_G, Polygon::COLOR_B};
-  printf("A\n");
-  Polygon p(5, dimension);
-  printf("B\n");
-  addCar(p);
-  printf("C\n");
+  int dimension[6] = {Polygon::POS_X, Polygon::POS_Y, Polygon::POS_Z, Polygon::COLOR_R, Polygon::COLOR_G, Polygon::COLOR_B};
+  Polygon p(6, dimension);
+  addCube(p);
   p.print();
-  
   
   GLfloat* vertices = p.getArrays();
   unsigned int vertex_num = p.dataArray.size();
   GLuint* elements = p.getElements();
   unsigned int elements_num = p.elementArray.size();
-  
-  printf("Vertex num: %d\n", vertex_num);
-  for (int i = 0; i < vertex_num; i++) {
-    printf("%d. %.2f %.2f %.2f %.2f %.2f\n", i, vertices[5*i], vertices[5*i+1], vertices[5*i+2], vertices[5*i+3], vertices[5*i+4]);
-  }
-  printf("Elements num: %d\n", elements_num);
-  for (int i = 0; i < elements_num; i++) {
-    printf("%d. %d\n", i, elements[i]);
-  }
-  printf("Segments num: %ld\n", p.offsetArray.size());
-  for (int i = 0; i < p.offsetArray.size(); i++) {
-    printf("%d. %d %d\n", i, p.offsetArray[i], p.sizeArray[i]);
-  }
   
   GLuint vertexbuffer;
   glGenBuffers(1, &vertexbuffer);
@@ -240,26 +329,49 @@ int main( void )
   
   GLint posAttrib = glGetAttribLocation(shaderProgram, "pos");
   glEnableVertexAttribArray(posAttrib);
-  glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE,
-                         5*sizeof(float), 0);
+  glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE,
+                         6*sizeof(float), 0);
 
   GLint colAttrib = glGetAttribLocation(shaderProgram, "inColor");
   glEnableVertexAttribArray(colAttrib);
   glVertexAttribPointer(colAttrib, 3, GL_FLOAT, GL_FALSE,
-                         5*sizeof(float), (void*)(2*sizeof(float)));
+                         6*sizeof(float), (void*)(3*sizeof(float)));
+  
+  GLuint transformLoc = glGetUniformLocation(shaderProgram, "transform");
+  
+  // Get a handle for our "MVP" uniform
+	GLuint MatrixID = glGetUniformLocation(shaderProgram, "MVP");
+
+	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
+	glm::mat4 Projection = glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
+	// Camera matrix
+	glm::mat4 View       = glm::lookAt(
+								glm::vec3(4,3,-3), // Camera is at (4,3,-3), in World Space
+								glm::vec3(0,0,0), // and looks at the origin
+								glm::vec3(0,1,0)  // Head is up (set to 0,-1,0 to look upside-down)
+						   );
+	// Model matrix : an identity matrix (model will be at the origin)
+	glm::mat4 Model      = glm::mat4(1.0f);
+	// Our ModelViewProjection : multiplication of our 3 matrices
+	glm::mat4 MVP        = Projection * View * Model; // Remember, matrix multiplication is the other way around
 
 	do{
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glUseProgram(shaderProgram);
-    //glDrawElements(GL_TRIANGLES, 39, GL_UNSIGNED_INT, 0);
-    //glDrawElements(GL_TRIANGLE_FAN, CIRCLE_SIDES+2, GL_UNSIGNED_INT, (void*)(39*sizeof(GLuint)));
+    
+		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
 
     //create transformation
     glm:mat4 transform, transform1, transform2;
     transform = glm::rotate(transform, 0.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-    unsigned int transformLoc = glGetUniformLocation(shaderProgram, "transform");
     glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
-
+    
+		
+		//This is for cube
+		glDrawElements(GL_TRIANGLES, p.sizeArray[0], GL_UNSIGNED_INT, (void*)(p.offsetArray[0]*sizeof(GLuint)));
+		
+		//This is for car, not needed now
+/*
     //draw car's body
     glDrawElements(GL_TRIANGLES, p.sizeArray[0], GL_UNSIGNED_INT, (void*)(p.offsetArray[0]*sizeof(GLuint)));
     glDrawElements(GL_TRIANGLES, p.sizeArray[1], GL_UNSIGNED_INT, (void*)(p.offsetArray[1]*sizeof(GLuint)));
@@ -284,6 +396,8 @@ int main( void )
     
     //draw front tire
     glDrawElements(GL_TRIANGLE_FAN, p.sizeArray[4], GL_UNSIGNED_INT, (void*)(p.offsetArray[4]*sizeof(GLuint)));
+
+*/
     
 		glfwSwapBuffers(window);
 		glfwPollEvents();
