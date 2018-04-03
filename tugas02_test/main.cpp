@@ -17,6 +17,7 @@ GLFWwindow* window;
 using namespace glm;
 
 #include <common/shader.hpp>
+#include <common/controls.hpp>
 #include "common/polygon.h"
 
 #define WINDOW_WIDTH 1024
@@ -301,8 +302,6 @@ int main( void )
   glGenVertexArrays(1, &VertexArrayID);
   glBindVertexArray(VertexArrayID);
   
-  
-  
   //////// Start coding here ////////
   int dimension[6] = {Polygon::POS_X, Polygon::POS_Y, Polygon::POS_Z, Polygon::COLOR_R, Polygon::COLOR_G, Polygon::COLOR_B};
   Polygon p(6, dimension);
@@ -327,77 +326,47 @@ int main( void )
   //// Create and compile our GLSL program from the shaders ////
   GLuint shaderProgram = LoadShaders( VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE );
   
-  GLint posAttrib = glGetAttribLocation(shaderProgram, "pos");
-  glEnableVertexAttribArray(posAttrib);
-  glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE,
-                         6*sizeof(float), 0);
-
-  GLint colAttrib = glGetAttribLocation(shaderProgram, "inColor");
-  glEnableVertexAttribArray(colAttrib);
-  glVertexAttribPointer(colAttrib, 3, GL_FLOAT, GL_FALSE,
-                         6*sizeof(float), (void*)(3*sizeof(float)));
-  
-  GLuint transformLoc = glGetUniformLocation(shaderProgram, "transform");
-  
   // Get a handle for our "MVP" uniform
 	GLuint MatrixID = glGetUniformLocation(shaderProgram, "MVP");
 
-	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
-	glm::mat4 Projection = glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
-	// Camera matrix
-	glm::mat4 View       = glm::lookAt(
-								glm::vec3(4,3,-3), // Camera is at (4,3,-3), in World Space
-								glm::vec3(0,0,0), // and looks at the origin
-								glm::vec3(0,1,0)  // Head is up (set to 0,-1,0 to look upside-down)
-						   );
-	// Model matrix : an identity matrix (model will be at the origin)
-	glm::mat4 Model      = glm::mat4(1.0f);
-	// Our ModelViewProjection : multiplication of our 3 matrices
-	glm::mat4 MVP        = Projection * View * Model; // Remember, matrix multiplication is the other way around
-
+	// glfwSetKeyCallback(window, key_callback);
 	do{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glUseProgram(shaderProgram);
+
+    // Compute the MVP matrix from keyboard and mouse input
+    computeMatricesFromInputs();
+		glm::mat4 ProjectionMatrix = getProjectionMatrix();
+		glm::mat4 ViewMatrix = getViewMatrix();
+		glm::mat4 ModelMatrix = glm::mat4(1.0);
+		glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
     
 		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
 
-    //create transformation
-    glm:mat4 transform, transform1, transform2;
-    transform = glm::rotate(transform, 0.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-    glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
-    
-		
+		GLint posAttrib = glGetAttribLocation(shaderProgram, "pos");
+	  glEnableVertexAttribArray(posAttrib);
+	  glVertexAttribPointer(
+	  	posAttrib,          // attribute. No particular reason for 0, but must match the layout in the shader.
+	  	3,                  // size
+	  	GL_FLOAT, 					// type
+	  	GL_FALSE,           // normalized?
+	    6*sizeof(float),    // stride
+	    0                   // array buffer offset
+	  );
+
+	  GLint colAttrib = glGetAttribLocation(shaderProgram, "inColor");
+	  glEnableVertexAttribArray(colAttrib);
+	  glVertexAttribPointer(
+	  	colAttrib,          			// attribute. No particular reason for 0, but must match the layout in the shader.
+	  	3,                  			// size
+	  	GL_FLOAT, 								// type
+	  	GL_FALSE,           			// normalized?
+	    6*sizeof(float),    			// stride
+	    (void*)(3*sizeof(float))  // array buffer offset
+	  );
+
 		//This is for cube
 		glDrawElements(GL_TRIANGLES, p.sizeArray[0], GL_UNSIGNED_INT, (void*)(p.offsetArray[0]*sizeof(GLuint)));
-		
-		//This is for car, not needed now
-/*
-    //draw car's body
-    glDrawElements(GL_TRIANGLES, p.sizeArray[0], GL_UNSIGNED_INT, (void*)(p.offsetArray[0]*sizeof(GLuint)));
-    glDrawElements(GL_TRIANGLES, p.sizeArray[1], GL_UNSIGNED_INT, (void*)(p.offsetArray[1]*sizeof(GLuint)));
-    glDrawElements(GL_TRIANGLES, p.sizeArray[2], GL_UNSIGNED_INT, (void*)(p.offsetArray[2]*sizeof(GLuint)));
-
-    //activate transformation
-    transform1 = glm::translate(transform1, glm::vec3(-0.33f, -0.1f, 0));
-    transform1 = glm::rotate(transform1, (float)glfwGetTime()*(-2), glm::vec3(0.0f, 0.0f, 1.0f));
-    transform1 = glm::translate(transform1, glm::vec3(0.33f, 0.1f, 0));
-    transformLoc = glGetUniformLocation(shaderProgram, "transform");
-    glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform1));
-
-    //draw back tire
-    glDrawElements(GL_TRIANGLE_FAN, p.sizeArray[3], GL_UNSIGNED_INT, (void*)(p.offsetArray[3]*sizeof(GLuint)));
-
-    //activate transformation
-    transform2 = glm::translate(transform2, glm::vec3(0.33f, -0.1f, -1.0f));
-    transform2 = glm::rotate(transform2, (float)glfwGetTime()*(-2), glm::vec3(0.0f, 0.0f, 1.0f));
-    transform2 = glm::translate(transform2, glm::vec3(-0.33f, 0.1f, 1.0f));
-    transformLoc = glGetUniformLocation(shaderProgram, "transform");
-    glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform2));
-    
-    //draw front tire
-    glDrawElements(GL_TRIANGLE_FAN, p.sizeArray[4], GL_UNSIGNED_INT, (void*)(p.offsetArray[4]*sizeof(GLuint)));
-
-*/
     
 		glfwSwapBuffers(window);
 		glfwPollEvents();

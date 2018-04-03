@@ -30,6 +30,8 @@ add_executable(tugas02_test
         common/shader.hpp
         common/polygon.cpp
         common/polygon.h
+        common/controls.hpp
+        common/controls.cpp
         )
         
 add_executable(tutorial01
