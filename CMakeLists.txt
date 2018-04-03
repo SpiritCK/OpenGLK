@@ -24,12 +24,25 @@ add_executable(tugas02
         common/shape.h
         )
         
+add_executable(tugas02_test
+        tugas02_test/main.cpp
+        common/shader.cpp
+        common/shader.hpp
+        common/polygon.cpp
+        common/polygon.h
+        )
+        
 add_executable(tutorial01
         tutorial01/main.cpp
         )
         
 add_executable(example01
         example01/src/main.cpp
+        common/shader.cpp
+        common/shader.hpp
+        )
+add_executable(tutorial04
+        tutorial04/tutorial04.cpp
         common/shader.cpp
         common/shader.hpp
         )
@@ -46,6 +59,12 @@ target_link_libraries(tugas02
         ${GLEW_LIBRARY}
         )
 
+target_link_libraries(tugas02_test
+        ${OPENGL_LIBRARY}
+        glfw
+        ${GLEW_LIBRARY}
+        )
+
 target_link_libraries(tutorial01
         ${OPENGL_LIBRARY}
         glfw
@@ -53,6 +72,12 @@ target_link_libraries(tutorial01
         )
 
 target_link_libraries(example01
+        ${OPENGL_LIBRARY}
+        glfw
+        ${GLEW_LIBRARY}
+        )
+        
+target_link_libraries(tutorial04
         ${OPENGL_LIBRARY}
         glfw
         ${GLEW_LIBRARY}
