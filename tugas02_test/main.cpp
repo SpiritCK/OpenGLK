@@ -351,107 +351,84 @@ void addCube(Polygon &p) {
   };
   GLuint elements[] = {
     //CarBody
-/*
-      0, 1, 13,
-      1, 2, 13,
-      2, 3, 13,
-      3, 13, 12,
-      3, 4, 12,
-      4, 5, 12,
-      5, 6, 12,
-      6, 12, 11,
-      6, 7, 11,
-      7, 8, 11,
-      8, 9, 11,
-      9, 10, 11
-      */
+    0, 1, 2,//1
+    3,4,5,//2
+    6,7,8,//3
+    9,10,11,//4
+    12,13,14,//5
+    15,16,17,//6
+    18,19,20,//7
+    21,22,23,//8
+    24,25,26,//9
+    27,28,29,//10
+    30,31,32,//11
+    33,34,35,//12
 
-          0, 1, 2,//1
-          3,4,5,//2
-          6,7,8,//3
-          9,10,11,//4
-          12,13,14,//5
-          15,16,17,//6
-          18,19,20,//7
-          21,22,23,//8
-          24,25,26,//9
-          27,28,29,//10
-          30,31,32,//11
-          33,34,35,//12
+    36,37,38,//13
+    39,40,41,//14
+    42,43,44,//15
+    45,46,47,//16
+    48,49,50,//17
+    51,52,53,//18
+    54,55,56,//19
+    57,58,59,//20
+    60,61,62,//21
+    63,64,65,//22
+    66,67,68,//23
+    69,70,71,//24
 
-          36,37,38,//13
-          39,40,41,//14
-          42,43,44,//15
-          45,46,47,//16
-          48,49,50,//17
-          51,52,53,//18
-          54,55,56,//19
-          57,58,59,//20
-          60,61,62,//21
-          63,64,65,//22
-          66,67,68,//23
-          69,70,71,//24
+    72,73,74,//25
+    75,76,77,//26
+    78,79,80,//27
+    81,82,83,//28
+    84,85,86,//29
+    87,88,89,//30
+    90,91,92,//31
+    93,94,95,//32
+    96,97,98,//33
+    99,100,101,//34
+    102,103,104,//35
+    105,106,107,//36
+    108,109,110,//37
+    111,112,113,//38
+    114,115,116,//39
+    117,118,119,//40
+    120,121,122,//41
+    123,124,125,//42
+    126,127,128,//43
+    129,130,131,//44
+    132,133,134,//45
+    135,136,137,//46
+    138,139,140,//47
+    141,142,143,//48
+    144,145,146,//49
+    147,148,149,//50
+    150,151,152,//51
+    153,154,155,//52
 
-          72,73,74,//25
-          75,76,77,//26
-          78,79,80,//27
-          81,82,83,//28
-          84,85,86,//29
-          87,88,89,//30
-          90,91,92,//31
-          93,94,95,//32
-          96,97,98,//33
-          99,100,101,//34
-          102,103,104,//35
-          105,106,107,//36
-          108,109,110,//37
-          111,112,113,//38
-          114,115,116,//39
-          117,118,119,//40
-          120,121,122,//41
-          123,124,125,//42
-          126,127,128,//43
-          129,130,131,//44
-          132,133,134,//45
-          135,136,137,//46
-          138,139,140,//47
-          141,142,143,//48
-          144,145,146,//49
-          147,148,149,//50
-          150,151,152,//51
-          153,154,155,//52
+    //carDoor
 
-      //carDoor
-      /*0, 1, 2,
-      0, 2, 3,
-      0, 3, 4,
-      0, 4, 5,
-      6, 7, 8,
-      6, 8, 9,
-      6, 9, 10,
-      6, 10, 11,
-      6, 11, 12*/
+    156,157,158,//53
+    156,158,159,//54
+    156,159,160,//55
+    156,160,161,//56
+    162,163,164,//57
+    162,164,165,//58
+    162,165,166,//59
+    162,166,167,//60
+    162,167,168,//61
 
-        156,157,158,//53
-        156,158,159,//54
-        156,159,160,//55
-        156,160,161,//56
-        162,163,164,//57
-        162,164,165,//58
-        162,165,166,//59
-        162,166,167,//60
-        162,167,168,//61
-
-        169,170,171,//62
-        169,171,172,//63
-        169,172,173,//64
-        169,173,174,//65
-        175,176,177,//66
-        175,177,178,//67
-        175,178,179,//68
-        175,179,180,//69
-        175,180,181//70
+    169,170,171,//62
+    169,171,172,//63
+    169,172,173,//64
+    169,173,174,//65
+    175,176,177,//66
+    175,177,178,//67
+    175,178,179,//68
+    175,179,180,//69
+    175,180,181//70
   };
+  float doorShade = 0.2f;
   GLfloat colors[] = {
     0.583f,  0.771f,  0.014f,
 		0.609f,  0.115f,  0.436f,
@@ -608,63 +585,63 @@ void addCube(Polygon &p) {
 		0.327f,  0.483f,  0.844f,  //52
 		0.822f,  0.569f,  0.201f,
 		0.435f,  0.602f,  0.223f,
-  	0.543f,  0.021f,  0.978f,  //53
-  	0.279f,  0.317f,  0.505f,
-  	0.167f,  0.620f,  0.077f,
-  	0.347f,  0.857f,  0.137f,  //54
-  	0.055f,  0.953f,  0.042f,
-  	0.714f,  0.505f,  0.345f,
-  	0.783f,  0.290f,  0.734f,  //55
-    0.722f,  0.645f,  0.174f,
-  	0.302f,  0.455f,  0.848f,
-    0.225f,  0.587f,  0.040f,  //56
-  	0.517f,  0.713f,  0.338f,
-  	0.053f,  0.959f,  0.120f,
-  	0.393f,  0.621f,  0.362f,  //57
-  	0.673f,  0.211f,  0.457f,
-  	0.820f,  0.883f,  0.371f,
-  	0.982f,  0.099f,  0.879f,  //58
-    0.583f,  0.771f,  0.014f,
-		0.609f,  0.115f,  0.436f,
-		0.327f,  0.483f,  0.844f,  //59
-		0.822f,  0.569f,  0.201f,
-		0.435f,  0.602f,  0.223f,
-  	0.982f,  0.099f,  0.879f,  //60
-    0.583f,  0.771f,  0.014f,
-		0.609f,  0.115f,  0.436f,
-		0.327f,  0.483f,  0.844f,  //61
-		0.822f,  0.569f,  0.201f,
-		0.435f,  0.602f,  0.223f,
-		0.327f,  0.483f,  0.844f,  //62
-		0.822f,  0.569f,  0.201f,
-		0.435f,  0.602f,  0.223f,
-  	0.543f,  0.021f,  0.978f,  //63
-  	0.279f,  0.317f,  0.505f,
-  	0.167f,  0.620f,  0.077f,
-  	0.347f,  0.857f,  0.137f,  //64
-  	0.055f,  0.953f,  0.042f,
-  	0.714f,  0.505f,  0.345f,
-  	0.783f,  0.290f,  0.734f,  //65
-    0.722f,  0.645f,  0.174f,
-  	0.302f,  0.455f,  0.848f,
-    0.225f,  0.587f,  0.040f,  //66
-  	0.517f,  0.713f,  0.338f,
-  	0.053f,  0.959f,  0.120f,
-  	0.393f,  0.621f,  0.362f,  //67
-  	0.673f,  0.211f,  0.457f,
-  	0.820f,  0.883f,  0.371f,
-  	0.982f,  0.099f,  0.879f,  //68
-    0.583f,  0.771f,  0.014f,
-		0.609f,  0.115f,  0.436f,
-		0.327f,  0.483f,  0.844f,  //69
-		0.822f,  0.569f,  0.201f,
-		0.435f,  0.602f,  0.223f,
-  	0.982f,  0.099f,  0.879f,  //70
-    0.583f,  0.771f,  0.014f,
-		0.609f,  0.115f,  0.436f,
-		0.327f,  0.483f,  0.844f,  //71
-		0.822f,  0.569f,  0.201f,
-		0.435f,  0.602f,  0.223f,
+  	doorShade,doorShade,doorShade,  //53
+  	doorShade,doorShade,doorShade,
+  	doorShade,doorShade,doorShade,
+  	doorShade,doorShade,doorShade,    //54
+  	doorShade,doorShade,doorShade,
+  	doorShade,doorShade,doorShade,
+  	doorShade,doorShade,doorShade,    //55
+  	doorShade,doorShade,doorShade,
+  	doorShade,doorShade,doorShade,
+  	doorShade,doorShade,doorShade,    //56
+  	doorShade,doorShade,doorShade,
+  	doorShade,doorShade,doorShade,
+  	doorShade,doorShade,doorShade,//57
+  	doorShade,doorShade,doorShade,
+  	doorShade,doorShade,doorShade,
+  	doorShade,doorShade,doorShade,//58
+  	doorShade,doorShade,doorShade,
+  	doorShade,doorShade,doorShade,
+  	doorShade,doorShade,doorShade,    //59
+  	doorShade,doorShade,doorShade,
+  	doorShade,doorShade,doorShade,
+  	doorShade,doorShade,doorShade,//60
+  	doorShade,doorShade,doorShade,
+  	doorShade,doorShade,doorShade,
+  	doorShade,doorShade,doorShade,//61
+  	doorShade,doorShade,doorShade,
+  	doorShade,doorShade,doorShade,
+  	doorShade,doorShade,doorShade,//62
+  	doorShade,doorShade,doorShade,
+  	doorShade,doorShade,doorShade,
+  	doorShade,doorShade,doorShade,//63
+  	doorShade,doorShade,doorShade,
+  	doorShade,doorShade,doorShade,
+  	doorShade,doorShade,doorShade,//64
+  	doorShade,doorShade,doorShade,
+  	doorShade,doorShade,doorShade,
+  	doorShade,doorShade,doorShade,//65
+  	doorShade,doorShade,doorShade,
+  	doorShade,doorShade,doorShade,
+  	doorShade,doorShade,doorShade,//66
+  	doorShade,doorShade,doorShade,
+  	doorShade,doorShade,doorShade,
+  	doorShade,doorShade,doorShade,//67
+  	doorShade,doorShade,doorShade,
+  	doorShade,doorShade,doorShade,
+  	doorShade,doorShade,doorShade,//68
+  	doorShade,doorShade,doorShade,
+  	doorShade,doorShade,doorShade,
+  	doorShade,doorShade,doorShade,//69
+  	doorShade,doorShade,doorShade,
+  	doorShade,doorShade,doorShade,
+  	doorShade,doorShade,doorShade,//70
+  	doorShade,doorShade,doorShade,
+  	doorShade,doorShade,doorShade,
+  	doorShade,doorShade,doorShade,//71
+  	doorShade,doorShade,doorShade,
+  	doorShade,doorShade,doorShade
   };
 
   p.addPolygon(
