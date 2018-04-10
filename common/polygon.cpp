@@ -79,6 +79,20 @@ void Polygon::addPolygon(GLfloat* arr, int num_of_point, GLuint* ele, int num_of
   }
 }
 
+void Polygon::addPolygon(GLfloat* arr, GLfloat* tex, int num_of_point, GLuint* ele, int num_of_ele) {
+  offsetArray.push_back(elementArray.size());
+  sizeArray.push_back(num_of_ele);
+  GLuint lastEle = dataArray.size() / n;
+  
+  for (int i = 0; i < num_of_point; i++) {
+    pushData(arr[3*i + 0], arr[3*i + 1], arr[3*i + 2], (GLfloat) 0.0f, (GLfloat) 0.0f, (GLfloat) 0.0f, tex[2*i + 0], tex[2*i + 1]);
+  }
+  
+  for (int i = 0; i < num_of_ele; i++) {
+    elementArray.push_back(ele[i] + lastEle);
+  }
+}
+
 void Polygon::addCircle(GLfloat x, GLfloat y, GLfloat r, GLfloat color_r, GLfloat color_g, GLfloat color_b, int n) {
   
   offsetArray.push_back(elementArray.size());
@@ -95,6 +109,70 @@ void Polygon::addCircle(GLfloat x, GLfloat y, GLfloat r, GLfloat color_r, GLfloa
       elementArray.push_back(i + lastEle);
   }
   elementArray.push_back(1 + lastEle);
+}
+
+void Polygon::addCylinder(GLfloat x, GLfloat y, GLfloat z, GLfloat r, int direction, GLfloat l, GLfloat color_r, GLfloat color_g, GLfloat color_b, int n) {
+  
+  offsetArray.push_back(elementArray.size());
+  sizeArray.push_back(4*n*3);
+  GLuint lastEle = dataArray.size() / this->n;
+  
+  GLfloat pairX, pairY, pairZ;
+
+  switch (direction) {
+    case POS_X :
+      pairX = x+l;
+      pairY = y;
+      pairZ = z;
+      break;
+    case POS_Y :
+      pairX = x;
+      pairY = y+l;
+      pairZ = z;
+      break;
+    case POS_Z :
+      pairX = x;
+      pairY = y;
+      pairZ = z+l;
+      break;
+  }
+  pushData(x, y, z, color_r, color_g, color_b, (GLfloat) 0.0f, (GLfloat) 0.0f);
+  pushData(pairX, pairY, pairZ, color_r, color_g, color_b, (GLfloat) 0.0f, (GLfloat) 0.0f);
+
+  for (int i = 0; i < n; i++) {
+      switch (direction) {
+        case POS_X:
+          pushData(x, y + (r * cos(i*2*M_PI / n)), z + (r * sin(i*2*M_PI / n)), color_r, color_g, color_b, (GLfloat) 0.0f, (GLfloat) 0.0f);
+          pushData(pairX, pairY + (r * cos(i*2*M_PI / n)), pairZ + (r * sin(i*2*M_PI / n)), color_r, color_g, color_b, (GLfloat) 0.0f, (GLfloat) 0.0f);
+        break;
+        case POS_Y:
+          pushData(x + (r * sin(i*2*M_PI / n)), y, z + (r * cos(i*2*M_PI / n)), color_r, color_g, color_b, (GLfloat) 0.0f, (GLfloat) 0.0f);
+          pushData(pairX + (r * sin(i*2*M_PI / n)), pairY, pairZ + (r * cos(i*2*M_PI / n)), color_r, color_g, color_b, (GLfloat) 0.0f, (GLfloat) 0.0f);
+        break;
+        case POS_Z:
+          pushData(x + (r * cos(i*2*M_PI / n)), y + (r * sin(i*2*M_PI / n)), z, color_r, color_g, color_b, (GLfloat) 0.0f, (GLfloat) 0.0f);
+          pushData(pairX + (r * cos(i*2*M_PI / n)), pairY + (r * sin(i*2*M_PI / n)), pairZ, color_r, color_g, color_b, (GLfloat) 0.0f, (GLfloat) 0.0f);
+        break;
+      }
+      
+  }
+    
+  for (int i = 0; i < n; i++) {
+      elementArray.push_back(2*i+2 + lastEle);
+      elementArray.push_back(lastEle);
+      elementArray.push_back(2*((i+1)%n)+2 + lastEle);
+  }
+  for (int i = 0; i < n; i++) {
+      elementArray.push_back(2*i+3 + lastEle);
+      elementArray.push_back(1 + lastEle);
+      elementArray.push_back(2*((i+1)%n)+3 + lastEle);
+  }
+  for (int i = 0; i < 2*n; i++) {
+      elementArray.push_back(i+2 + lastEle);
+      elementArray.push_back((i+1)%(2*n)+2 + lastEle);
+      elementArray.push_back((i+2)%(2*n)+2 + lastEle);
+  }
+  
 }
 
 GLfloat* Polygon::getArrays() {

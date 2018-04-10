@@ -34,6 +34,18 @@ add_executable(tugas02_test
         common/controls.cpp
         )
         
+add_executable(tugas04
+        tugas04/main.cpp
+        common/shader.cpp
+        common/shader.hpp
+        common/polygon.cpp
+        common/polygon.h
+        common/controls.hpp
+        common/controls.cpp
+        common/texture.hpp
+        common/texture.cpp
+        )
+        
 add_executable(tutorial01
         tutorial01/main.cpp
         )
@@ -62,6 +74,12 @@ target_link_libraries(tugas02
         )
 
 target_link_libraries(tugas02_test
+        ${OPENGL_LIBRARY}
+        glfw
+        ${GLEW_LIBRARY}
+        )
+
+target_link_libraries(tugas04
         ${OPENGL_LIBRARY}
         glfw
         ${GLEW_LIBRARY}
