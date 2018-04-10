@@ -21,6 +21,8 @@ glm::vec3 direction = glm::vec3 (
     sin(verticalAngle),
     cos(verticalAngle) * cos(horizontalAngle)
 );
+//previous cursor position
+double x_prev = 0, y_prev = 0;
 // Right vector
 glm::vec3 right = glm::vec3(
     sin(horizontalAngle - 3.14f/2.0f),
@@ -85,6 +87,24 @@ glm::mat4 getProjectionMatrix(){
 void computeMatricesFromInputs(){
 	glm::mat4 transform;
 	glm::vec4 temp;
+  double xpos, ypos;
+  glfwGetCursorPos(window, &xpos, &ypos);
+
+  if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+    double x_diff = x_prev - xpos;
+    double y_diff = y_prev - ypos;
+    //rotate forward / backward
+    transform = glm::rotate(glm::mat4(1.0f), glm::radians((float)y_diff), right);
+    temp = transform * vec4(position, 1.0f);
+    //rotate right / left
+    transform = glm::rotate(transform, glm::radians((float)x_diff), up);
+    temp = transform * vec4(position, 1.0f);
+    //update position
+    position = vec3(temp.x, temp.y, temp.z);
+  }
+
+  y_prev = ypos;
+  x_prev = xpos;
 
 	// Move forward
 	if (glfwGetKey( window, GLFW_KEY_UP ) == GLFW_PRESS){
