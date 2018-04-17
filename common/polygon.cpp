@@ -249,22 +249,30 @@ void Polygon::print() {
 }
 
 void Polygon::generateNormal(){
+  printf("print generateNormal\n");
   for(int i=0;i<elementArray.size();i+=3){
+    printf("%d %d %d\n",elementArray[i+0],elementArray[i+1],elementArray[i+2] );
     GLfloat normal_x,normal_y,normal_z;
     GLfloat v1x,v1y,v1z,v2x,v2y,v2z,v3x,v3y,v3z;
     v1x = dataArray[(elementArray[i+0]*n) + offset[POS_X]];
     v1y = dataArray[(elementArray[i+0]*n) + offset[POS_Y]];
     v1z = dataArray[(elementArray[i+0]*n) + offset[POS_Z]];
+    printf("%.2f %.2f %.2f\n",v1x,v1y, v1z );
     v2x = dataArray[(elementArray[i+1]*n) + offset[POS_X]];
     v2y = dataArray[(elementArray[i+1]*n) + offset[POS_Y]];
     v2z = dataArray[(elementArray[i+1]*n) + offset[POS_Z]];
+    printf("%.2f %.2f %.2f\n",v2x,v2y, v2z );
     v3x = dataArray[(elementArray[i+2]*n) + offset[POS_X]];
     v3y = dataArray[(elementArray[i+2]*n) + offset[POS_Y]];
     v3z = dataArray[(elementArray[i+2]*n) + offset[POS_Z]];
+    printf("%.2f %.2f %.2f\n",v3x,v3y, v3z );
 
     normal_x = ((v2y-v1y)*(v3z-v1z))-((v2z-v1z)*(v3y-v1y));
     normal_y = ((v2z-v1z)*(v3x-v1x))-((v2x-v1x)*(v3z-v1z));
     normal_z = ((v2x-v1x)*(v3y-v1y))-((v2y-v1y)*(v3x-v1x));
+
+
+    printf("%.2f %.2f %.2f\n\n",normal_x, normal_y, normal_z );
 
     float vectorLength = sqrt(normal_x*normal_x + normal_y*normal_y + normal_z*normal_z);
     normal_x = normal_x / vectorLength;
@@ -274,5 +282,8 @@ void Polygon::generateNormal(){
     normalArray.push_back(normal_x);
     normalArray.push_back(normal_y);
     normalArray.push_back(normal_z);
+
+    printf("%.2f %.2f %.2f\n\n",normal_x, normal_y, normal_z );
   }
+  printf("Finish print generateNormal\n");
 }
