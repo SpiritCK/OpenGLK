@@ -15,24 +15,28 @@ public:
   static const int COLOR_B = 5;
   static const int TEXTURE_X = 6;
   static const int TEXTURE_Y = 7;
-  
+
   std::vector<GLfloat> dataArray;
   std::vector<GLuint> elementArray;
   std::vector<unsigned int> offsetArray;
   std::vector<unsigned int> sizeArray;
   std::vector<GLenum> modeArray;
-  
+  std::vector<GLfloat> normalArray;
+
   Polygon() {}
   Polygon(int n, int* a);
   void addPolygon(GLfloat* arr, int num_of_point, GLuint* ele, int num_of_ele, GLfloat r, GLfloat g, GLfloat b);
   void addPolygon(GLfloat* arr, int num_of_point, GLuint* ele, int num_of_ele, GLfloat* col);
   void addPolygon(GLfloat* arr, GLfloat* tex, int num_of_point, GLuint* ele, int num_of_ele);
-  
+
   void addCircle(GLfloat x, GLfloat y, GLfloat r, GLfloat color_r, GLfloat color_g, GLfloat color_b, int n);
   void addCylinder(GLfloat x, GLfloat y, GLfloat z, GLfloat r, int direction, GLfloat l, GLfloat color_r, GLfloat color_g, GLfloat color_b, int n);
-  
+
+  void generateNormal();
+
   GLfloat* getArrays();
   GLuint* getElements();
+  GLfloat* getNormal();
   void print();
 
 private:

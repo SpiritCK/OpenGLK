@@ -47,15 +47,15 @@ void Polygon::pushData(GLfloat x, GLfloat y, GLfloat z, GLfloat r, GLfloat g, GL
     num_of_point * 3 = arr.size
 */
 void Polygon::addPolygon(GLfloat* arr, int num_of_point, GLuint* ele, int num_of_ele, GLfloat r, GLfloat g, GLfloat b) {
-  
+
   offsetArray.push_back(elementArray.size());
   sizeArray.push_back(num_of_ele);
   GLuint lastEle = dataArray.size() / n;
-  
+
   for (int i = 0; i < num_of_point; i++) {
     pushData(arr[3*i + 0], arr[3*i + 1], arr[3*i + 2], r, g, b, (GLfloat) 0.0f, (GLfloat) 0.0f);
   }
-  
+
   for (int i = 0; i < num_of_ele; i++) {
     elementArray.push_back(ele[i] + lastEle);
   }
@@ -65,15 +65,15 @@ void Polygon::addPolygon(GLfloat* arr, int num_of_point, GLuint* ele, int num_of
     col: colors (r, g, b), should be the same as the number of vertices
 */
 void Polygon::addPolygon(GLfloat* arr, int num_of_point, GLuint* ele, int num_of_ele, GLfloat* col) {
-  
+
   offsetArray.push_back(elementArray.size());
   sizeArray.push_back(num_of_ele);
   GLuint lastEle = dataArray.size() / n;
-  
+
   for (int i = 0; i < num_of_point; i++) {
     pushData(arr[3*i + 0], arr[3*i + 1], arr[3*i + 2], col[3*i + 0], col[3*i + 1], col[3*i + 2], (GLfloat) 0.0f, (GLfloat) 0.0f);
   }
-  
+
   for (int i = 0; i < num_of_ele; i++) {
     elementArray.push_back(ele[i] + lastEle);
   }
@@ -83,18 +83,18 @@ void Polygon::addPolygon(GLfloat* arr, GLfloat* tex, int num_of_point, GLuint* e
   offsetArray.push_back(elementArray.size());
   sizeArray.push_back(num_of_ele);
   GLuint lastEle = dataArray.size() / n;
-  
+
   for (int i = 0; i < num_of_point; i++) {
     pushData(arr[3*i + 0], arr[3*i + 1], arr[3*i + 2], (GLfloat) 0.0f, (GLfloat) 0.0f, (GLfloat) 0.0f, tex[2*i + 0], tex[2*i + 1]);
   }
-  
+
   for (int i = 0; i < num_of_ele; i++) {
     elementArray.push_back(ele[i] + lastEle);
   }
 }
 
 void Polygon::addCircle(GLfloat x, GLfloat y, GLfloat r, GLfloat color_r, GLfloat color_g, GLfloat color_b, int n) {
-  
+
   offsetArray.push_back(elementArray.size());
   sizeArray.push_back(n+2);
   GLuint lastEle = dataArray.size() / this->n;
@@ -104,7 +104,7 @@ void Polygon::addCircle(GLfloat x, GLfloat y, GLfloat r, GLfloat color_r, GLfloa
  for (int i = 1; i < n+1; i++) {
       pushData(x + (r * cos(i*2*M_PI / n)), y + (r * sin(i*2*M_PI / n)), (GLfloat) 0.0f, color_r, color_g, color_b, (GLfloat) 0.0f, (GLfloat) 0.0f);
   }
-    
+
   for (int i = 0; i < n+1; i++) {
       elementArray.push_back(i + lastEle);
   }
@@ -112,11 +112,11 @@ void Polygon::addCircle(GLfloat x, GLfloat y, GLfloat r, GLfloat color_r, GLfloa
 }
 
 void Polygon::addCylinder(GLfloat x, GLfloat y, GLfloat z, GLfloat r, int direction, GLfloat l, GLfloat color_r, GLfloat color_g, GLfloat color_b, int n) {
-  
+
   offsetArray.push_back(elementArray.size());
   sizeArray.push_back(4*n*3);
   GLuint lastEle = dataArray.size() / this->n;
-  
+
   GLfloat pairX, pairY, pairZ;
 
   switch (direction) {
@@ -154,9 +154,9 @@ void Polygon::addCylinder(GLfloat x, GLfloat y, GLfloat z, GLfloat r, int direct
           pushData(pairX + (r * cos(i*2*M_PI / n)), pairY + (r * sin(i*2*M_PI / n)), pairZ, color_r, color_g, color_b, (GLfloat) 0.0f, (GLfloat) 0.0f);
         break;
       }
-      
+
   }
-    
+
   for (int i = 0; i < n; i++) {
       elementArray.push_back(2*i+2 + lastEle);
       elementArray.push_back(lastEle);
@@ -172,12 +172,12 @@ void Polygon::addCylinder(GLfloat x, GLfloat y, GLfloat z, GLfloat r, int direct
       elementArray.push_back((i+1)%(2*n)+2 + lastEle);
       elementArray.push_back((i+2)%(2*n)+2 + lastEle);
   }
-  
+
 }
 
 GLfloat* Polygon::getArrays() {
   auto result = new GLfloat[dataArray.size()];
-    
+
   for (int i = 0; i < dataArray.size(); i++) {
     result[i] = dataArray[i];
   }
@@ -187,9 +187,19 @@ GLfloat* Polygon::getArrays() {
 
 GLuint* Polygon::getElements() {
   auto result = new GLuint[elementArray.size()];
-    
+
   for (int i = 0; i < elementArray.size(); i++) {
     result[i] = elementArray[i];
+  }
+
+  return result;
+}
+
+GLfloat* Polygon::getNormal(){
+  auto result = new GLfloat[normalArray.size()];
+
+  for(int i=0;i<normalArray.size(); i++){
+    result[i] = normalArray[i];
   }
 
   return result;
@@ -205,27 +215,64 @@ void Polygon::print() {
   printf("    Offset col b: %d\n", offset[COLOR_B]);
   printf("    Offset tex x: %d\n", offset[TEXTURE_X]);
   printf("    Offset tex y: %d\n", offset[TEXTURE_Y]);
-  
+
   printf("\nPoints: %lu", dataArray.size() / n);
   for (int i = 0; i < dataArray.size(); i++) {
     if (i % n == 0)
       printf("\n    ");
     printf("%.2f ", dataArray[i]);
   }
-  
+
   printf("\nElements: %lu\n", elementArray.size());
   for (int i = 0; i < elementArray.size(); i++) {
     printf("    %d\n", elementArray[i]);
   }
-  
+
   printf("\nOffsets: %lu\n", offsetArray.size());
   for (int i = 0; i < offsetArray.size(); i++) {
     printf("    %d\n", offsetArray[i]);
   }
-  
+
   printf("\nSize: %lu\n", sizeArray.size());
   for (int i = 0; i < sizeArray.size(); i++) {
     printf("    %d\n", sizeArray[i]);
   }
+
+  printf("\nnormals: %lu\n", normalArray.size());
+  for (int i = 0; i < normalArray.size(); i++) {
+    if (i % 3 == 0)
+      printf("\n    ");
+    printf("%.2f ", normalArray[i]);
+  }
+
+
 }
 
+void Polygon::generateNormal(){
+  for(int i=0;i<elementArray.size();i+=3){
+    GLfloat normal_x,normal_y,normal_z;
+    GLfloat v1x,v1y,v1z,v2x,v2y,v2z,v3x,v3y,v3z;
+    v1x = dataArray[(elementArray[i+0]*n) + offset[POS_X]];
+    v1y = dataArray[(elementArray[i+0]*n) + offset[POS_Y]];
+    v1z = dataArray[(elementArray[i+0]*n) + offset[POS_Z]];
+    v2x = dataArray[(elementArray[i+1]*n) + offset[POS_X]];
+    v2y = dataArray[(elementArray[i+1]*n) + offset[POS_Y]];
+    v2z = dataArray[(elementArray[i+1]*n) + offset[POS_Z]];
+    v3x = dataArray[(elementArray[i+2]*n) + offset[POS_X]];
+    v3y = dataArray[(elementArray[i+2]*n) + offset[POS_Y]];
+    v3z = dataArray[(elementArray[i+2]*n) + offset[POS_Z]];
+
+    normal_x = ((v2y-v1y)*(v3z-v1z))-((v2z-v1z)*(v3y-v1y));
+    normal_y = ((v2z-v1z)*(v3x-v1x))-((v2x-v1x)*(v3z-v1z));
+    normal_z = ((v2x-v1x)*(v3y-v1y))-((v2y-v1y)*(v3x-v1x));
+
+    float vectorLength = sqrt(normal_x*normal_x + normal_y*normal_y + normal_z*normal_z);
+    normal_x = normal_x / vectorLength;
+    normal_y = normal_y / vectorLength;
+    normal_z = normal_z / vectorLength;
+
+    normalArray.push_back(normal_x);
+    normalArray.push_back(normal_y);
+    normalArray.push_back(normal_z);
+  }
+}

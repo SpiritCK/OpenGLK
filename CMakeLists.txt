@@ -15,7 +15,7 @@ add_executable(tugas01
         common/shader.cpp
         common/shader.hpp
         )
-        
+
 add_executable(tugas02
         tugas02/main.cpp
         common/shader.cpp
@@ -23,7 +23,7 @@ add_executable(tugas02
         common/shape.cpp
         common/shape.h
         )
-        
+
 add_executable(tugas02_test
         tugas02_test/main.cpp
         common/shader.cpp
@@ -33,7 +33,7 @@ add_executable(tugas02_test
         common/controls.hpp
         common/controls.cpp
         )
-        
+
 add_executable(tugas04
         tugas04/main.cpp
         common/shader.cpp
@@ -45,11 +45,23 @@ add_executable(tugas04
         common/texture.hpp
         common/texture.cpp
         )
-        
+
+add_executable(tugas05
+        tugas05/main.cpp
+        common/shader.cpp
+        common/shader.hpp
+        common/polygon.cpp
+        common/polygon.h
+        common/controls.hpp
+        common/controls.cpp
+        common/texture.hpp
+        common/texture.cpp
+        )
+
 add_executable(tutorial01
         tutorial01/main.cpp
         )
-        
+
 add_executable(example01
         example01/src/main.cpp
         common/shader.cpp
@@ -85,6 +97,12 @@ target_link_libraries(tugas04
         ${GLEW_LIBRARY}
         )
 
+target_link_libraries(tugas05
+        ${OPENGL_LIBRARY}
+        glfw
+        ${GLEW_LIBRARY}
+        )
+
 target_link_libraries(tutorial01
         ${OPENGL_LIBRARY}
         glfw
@@ -96,10 +114,9 @@ target_link_libraries(example01
         glfw
         ${GLEW_LIBRARY}
         )
-        
+
 target_link_libraries(tutorial04
         ${OPENGL_LIBRARY}
         glfw
         ${GLEW_LIBRARY}
         )
-
