@@ -49,6 +49,10 @@ glm::mat4 getProjectionMatrix(){
 	return ProjectionMatrix;
 }
 
+void setPosition(float x, float y, float z) {
+  position = glm::vec3(x, y, z);
+}
+
 // void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 // {
 // 	glm::mat4 transform;
