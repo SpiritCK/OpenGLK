@@ -14,7 +14,7 @@ float horizontalAngle = 3.14f;
 // Initial vertical angle : none
 float verticalAngle = 0.0f;
 // Initial Field of View
-float initialFoV = 30.0f;
+float initialFoV = 60.0f;
 // Direction : Spherical coordinates to Cartesian coordinates conversion
 glm::vec3 direction = glm::vec3 (
     cos(verticalAngle) * sin(horizontalAngle),
