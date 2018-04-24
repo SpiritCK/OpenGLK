@@ -25,7 +25,7 @@ using namespace glm;
 #define SCREEN_TITLE "Mobil bagus"
 #define VERTEX_SHADER_FILE "tugas06/shader/VertexShader.vsgl"
 #define FRAGMENT_SHADER_FILE "tugas06/shader/FragmentShader.fsgl"
-#define MODEL_FILE "tugas06/lexus_hs.obj"
+#define MODEL_FILE "tugas06/test.obj"
 #define TEXTURE_FILE "tugas06/1lexus.dds"
 
 int main( void )
@@ -117,7 +117,7 @@ int main( void )
 	glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
 	glBufferData(GL_ARRAY_BUFFER, uvs.size() * sizeof(glm::vec2), &uvs[0], GL_STATIC_DRAW);
 
-  setPosition(0, 90, 30);
+  setPosition(0, 1, 5);
 
 	do{
 
