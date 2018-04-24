@@ -101,6 +101,7 @@ int main( void )
 	// Get a handle for our "myTextureSampler" uniform
 	GLuint TextureID  = glGetUniformLocation(programID, "myTextureSampler");
   GLuint LightID = glGetUniformLocation(programID, "LightPosition_worldspace");
+  GLuint LightAttrib = glGetUniformLocation(programID, "LightPower");
   GLint posAttrib = glGetAttribLocation(programID, "pos");
 	GLint colAttrib = glGetAttribLocation(programID, "vertexUV");
   GLint normalAttrib = glGetAttribLocation(programID, "vertexNormal_modelspace");
@@ -131,6 +132,7 @@ int main( void )
   setPosition(0, 1, 5);
   
   glm::vec3 lightPos = glm::vec3(4,4,4);
+  float lightPower = 50.0;
 
 	do{
 
@@ -146,6 +148,13 @@ int main( void )
 		glm::mat4 ViewMatrix = getViewMatrix();
 		glm::mat4 ModelMatrix = glm::mat4(1.0);
 		glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
+		
+		if (glfwGetKey( window, GLFW_KEY_Q ) == GLFW_PRESS){
+		  if (lightPower < 100) lightPower += 1;
+	  } else if (glfwGetKey( window, GLFW_KEY_W ) == GLFW_PRESS){
+		  if (lightPower > 0) lightPower -= 1;
+	  }
+    glUniform1f(LightAttrib, lightPower);
 
 		// Send our transformation to the currently bound shader, 
 		// in the "MVP" uniform
