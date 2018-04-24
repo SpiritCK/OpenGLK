@@ -92,12 +92,18 @@ int main( void )
 
 	// Get a handle for our "MVP" uniform
 	GLuint MatrixID = glGetUniformLocation(programID, "MVP");
+  GLuint ViewMatrixID = glGetUniformLocation(programID,"V");
+  GLuint ModelMatrixID = glGetUniformLocation(programID, "M");
 
 	// Load the texture
 	GLuint Texture = loadDDS(TEXTURE_FILE);
 	
 	// Get a handle for our "myTextureSampler" uniform
 	GLuint TextureID  = glGetUniformLocation(programID, "myTextureSampler");
+  GLuint LightID = glGetUniformLocation(programID, "LightPosition_worldspace");
+  GLint posAttrib = glGetAttribLocation(programID, "pos");
+	GLint colAttrib = glGetAttribLocation(programID, "vertexUV");
+  GLint normalAttrib = glGetAttribLocation(programID, "vertexNormal_modelspace");
 
 	// Read our .obj file
 	std::vector<glm::vec3> vertices;
@@ -117,7 +123,14 @@ int main( void )
 	glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
 	glBufferData(GL_ARRAY_BUFFER, uvs.size() * sizeof(glm::vec2), &uvs[0], GL_STATIC_DRAW);
 
+	GLuint normalbuffer;
+	glGenBuffers(1, &normalbuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
+	glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), &normals[0], GL_STATIC_DRAW);
+
   setPosition(0, 1, 5);
+  
+  glm::vec3 lightPos = glm::vec3(4,4,4);
 
 	do{
 
@@ -137,6 +150,12 @@ int main( void )
 		// Send our transformation to the currently bound shader, 
 		// in the "MVP" uniform
 		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+    glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &ModelMatrix[0][0]);
+    glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
+    
+    // Send light position
+    vec4 tempLight = glm::rotate(glm::mat4(1.0f), (float)glfwGetTime()*(-2), glm::vec3(0.0f, 0.0f, 1.0f)) * vec4(lightPos, 1.0);
+    glUniform3f(LightID, tempLight.x, tempLight.y, tempLight.z);
 
 		// Bind our texture in Texture Unit 0
 		glActiveTexture(GL_TEXTURE0);
@@ -145,10 +164,10 @@ int main( void )
 		glUniform1i(TextureID, 0);
 
 		// 1rst attribute buffer : vertices
-		glEnableVertexAttribArray(0);
+	  glEnableVertexAttribArray(posAttrib);
 		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 		glVertexAttribPointer(
-			0,                  // attribute
+			posAttrib,          // attribute
 			3,                  // size
 			GL_FLOAT,           // type
 			GL_FALSE,           // normalized?
@@ -157,11 +176,23 @@ int main( void )
 		);
 
 		// 2nd attribute buffer : UVs
-		glEnableVertexAttribArray(1);
+	  glEnableVertexAttribArray(colAttrib);
 		glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
 		glVertexAttribPointer(
-			1,                                // attribute
+			colAttrib,                        // attribute
 			2,                                // size
+			GL_FLOAT,                         // type
+			GL_FALSE,                         // normalized?
+			0,                                // stride
+			(void*)0                          // array buffer offset
+		);
+
+		// 3rd attribute buffer : Normals
+	  glEnableVertexAttribArray(normalAttrib);
+		glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
+		glVertexAttribPointer(
+			normalAttrib,                     // attribute
+			3,                                // size
 			GL_FLOAT,                         // type
 			GL_FALSE,                         // normalized?
 			0,                                // stride
@@ -171,8 +202,9 @@ int main( void )
 		// Draw the triangles !
 		glDrawArrays(GL_TRIANGLES, 0, vertices.size() );
 
-		glDisableVertexAttribArray(0);
-		glDisableVertexAttribArray(1);
+		glDisableVertexAttribArray(posAttrib);
+		glDisableVertexAttribArray(colAttrib);
+		glDisableVertexAttribArray(normalAttrib);
 
 		// Swap buffers
 		glfwSwapBuffers(window);
