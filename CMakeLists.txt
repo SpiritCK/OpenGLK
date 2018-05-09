@@ -84,6 +84,28 @@ add_executable(tutorial04
         common/shader.cpp
         common/shader.hpp
         )
+        
+add_executable(tutorial18
+        tutorial18/tutorial18.cpp
+        common/shader.cpp
+        common/shader.hpp
+        common/controls.hpp
+        common/controls.cpp
+        common/texture.hpp
+        common/texture.cpp
+        )
+        
+add_executable(uas
+        uas/main.cpp
+        common/shader.cpp
+        common/shader.hpp
+        common/controls.hpp
+        common/controls.cpp
+        common/texture.hpp
+        common/texture.cpp
+        common/objloader.cpp
+        common/objloader.hpp
+        )
 
 target_link_libraries(tugas01
         ${OPENGL_LIBRARY}
@@ -134,6 +156,18 @@ target_link_libraries(example01
         )
 
 target_link_libraries(tutorial04
+        ${OPENGL_LIBRARY}
+        glfw
+        ${GLEW_LIBRARY}
+        )
+
+target_link_libraries(tutorial18
+        ${OPENGL_LIBRARY}
+        glfw
+        ${GLEW_LIBRARY}
+        )
+
+target_link_libraries(uas
         ${OPENGL_LIBRARY}
         glfw
         ${GLEW_LIBRARY}
