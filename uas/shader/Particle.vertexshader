@@ -20,8 +20,9 @@ void main()
 	
 	vec3 vertexPosition_worldspace = 
 		particleCenter_wordspace
-		+ CameraRight_worldspace * squareVertices.x * particleSize
-		+ CameraUp_worldspace * squareVertices.y * particleSize;
+		+ vec3(1.0f, 0.0f, 0.0f) * squareVertices.x * particleSize
+		+ vec3(0.0f, 1.0f, 0.0f) * squareVertices.y * particleSize
+		+ vec3(0.0f, 0.0f, 1.0f) * squareVertices.z * particleSize;
 
 	// Output position of the vertex
 	gl_Position = VP * mat4(1.0f) * vec4(vertexPosition_worldspace, 1.0f);
