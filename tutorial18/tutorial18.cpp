@@ -33,7 +33,7 @@ struct Particle{
 	}
 };
 
-const int MaxParticles = 100000;
+const int MaxParticles = 50000;
 Particle ParticlesContainer[MaxParticles];
 int LastUsedParticle = 0;
 
@@ -108,7 +108,7 @@ int main( void )
     glfwSetCursorPos(window, 1024/2, 768/2);
 
 	// Dark blue background
-	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
 	// Enable depth test
 	glEnable(GL_DEPTH_TEST);
@@ -147,10 +147,10 @@ int main( void )
 	// The VBO containing the 4 vertices of the particles.
 	// Thanks to instancing, they will be shared by all particles.
 	static const GLfloat g_vertex_buffer_data[] = { 
-		 -0.005f, -0.005f, 0.0f,
-		  0.005f, -0.005f, 0.0f,
-		 -0.005f,  0.005f, 0.0f,
-		  0.005f,  0.005f, 0.0f,
+		 -0.0013f, -0.006f, 0.0f,
+		  0.0013f, -0.006f, 0.0f,
+		 -0.0013f,  0.006f, 0.0f,
+		  0.0013f,  0.006f, 0.0f,
 	};
 	GLuint billboard_vertex_buffer;
 	glGenBuffers(1, &billboard_vertex_buffer);
@@ -201,33 +201,28 @@ int main( void )
 		// Generate 10 new particule each millisecond,
 		// but limit this to 16 ms (60 fps), or if you have 1 long frame (1sec),
 		// newparticles will be huge and the next frame even longer.
-		int newparticles = (int)(delta*10000.0);
+		int newparticles = (int)(delta*1000.0);
 		if (newparticles > (int)(0.016f*10000.0))
 			newparticles = (int)(0.016f*10000.0);
 		
 		for(int i=0; i<newparticles; i++){
 			int particleIndex = FindUnusedParticle();
-			ParticlesContainer[particleIndex].life = 5.0f; // This particle will live 5 seconds.
-			ParticlesContainer[particleIndex].pos = glm::vec3(0,0,0);
+			ParticlesContainer[particleIndex].life = 10.0f; // This particle will live 5 seconds.
+      float randomX = (float)(rand()%2000 - 1000.0f)/1000.0f;
+      float randomZ = (float)(rand()%2000 - 1000.0f)/1000.0f;
+			ParticlesContainer[particleIndex].pos = glm::vec3(randomX, 0.4, randomZ);
 
-			float spread = 1.5f;
-			glm::vec3 maindir = glm::vec3(7.0f, 0.0f, 0.0f);
-			// Very bad way to generate a random direction; 
-			// See for instance http://stackoverflow.com/questions/5408276/python-uniform-spherical-distribution instead,
-			// combined with some user-controlled parameters (main direction, spread, etc)
-			glm::vec3 randomdir = glm::vec3(
-				(rand()%2000 - 1000.0f)/1000.0f,
-				(rand()%2000 - 1000.0f)/1000.0f,
-				(rand()%2000 - 1000.0f)/1000.0f
-			);
-			
-			ParticlesContainer[particleIndex].speed = (maindir + randomdir*spread) * 0.015f;
-
+      vec3 temp = glm::vec3(
+                    0.0f,
+                    (rand()%2000 - 1000.0f)/50.0f,
+                    0.0f
+                  );
+			ParticlesContainer[particleIndex].speed = temp * 1.5f * 0.015f;
 
 			// Very bad way to generate a random color
-			ParticlesContainer[particleIndex].r = 128;//rand() % 256;
-			ParticlesContainer[particleIndex].g = 128;//rand() % 256;
-			ParticlesContainer[particleIndex].b = 128;//rand() % 256;
+			ParticlesContainer[particleIndex].r = 64;//rand() % 256;
+			ParticlesContainer[particleIndex].g = 164;//rand() % 256;
+			ParticlesContainer[particleIndex].b = 223;//rand() % 256;
 			ParticlesContainer[particleIndex].a = 64;//(rand() % 256) / 3;
 
 			ParticlesContainer[particleIndex].size = (rand()%1000)/2000.0f + 0.1f;
@@ -250,10 +245,9 @@ int main( void )
 
 					// Simulate simple physics : gravity only, no collisions
 					//p.speed += glm::vec3(0.0f,-9.81f, 0.0f) * (float)delta * 0.5f;
-			    p.speed += glm::vec3(-0.03f, 0.007f, 0.0f) * (float)delta;
-				  if (p.speed.x < 0)
-			      p.speed.x = 0.0f;
-					p.pos += p.speed * (float)delta;
+			    p.speed += glm::vec3(0.0f, 0.05f, 0.0f) * (float)delta;
+					//p.pos -= p.speed * (float)delta;
+          p.pos.y -= 0.012f;
 					p.cameradistance = glm::length2( p.pos - CameraPosition );
 					//ParticlesContainer[i].pos += glm::vec3(0.0f,10.0f, 0.0f) * (float)delta;
 
