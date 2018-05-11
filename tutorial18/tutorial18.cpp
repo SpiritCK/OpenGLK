@@ -36,6 +36,7 @@ struct Particle{
 const int MaxParticles = 50000;
 Particle ParticlesContainer[MaxParticles];
 int LastUsedParticle = 0;
+const float GROUND_LEVEL = -0.02f;
 
 // Finds a Particle in ParticlesContainer which isn't used yet.
 // (i.e. life < 0);
@@ -147,10 +148,10 @@ int main( void )
 	// The VBO containing the 4 vertices of the particles.
 	// Thanks to instancing, they will be shared by all particles.
 	static const GLfloat g_vertex_buffer_data[] = { 
-		 -0.0013f, -0.006f, 0.0f,
-		  0.0013f, -0.006f, 0.0f,
-		 -0.0013f,  0.006f, 0.0f,
-		  0.0013f,  0.006f, 0.0f,
+		 -0.0014f, -0.006f, 0.0f,
+		  0.0014f, -0.006f, 0.0f,
+		 -0.0014f,  0.006f, 0.0f,
+		  0.0014f,  0.006f, 0.0f,
 	};
 	GLuint billboard_vertex_buffer;
 	glGenBuffers(1, &billboard_vertex_buffer);
@@ -238,11 +239,13 @@ int main( void )
 			Particle& p = ParticlesContainer[i]; // shortcut
 
 			if(p.life > 0.0f){
-
+        //check collision, put particle to death if collide
+        if (p.pos.y <= GROUND_LEVEL) {
+          p.life = 0.0f;
+        }
 				// Decrease life
 				p.life -= delta;
 				if (p.life > 0.0f){
-
 					// Simulate simple physics : gravity only, no collisions
 					//p.speed += glm::vec3(0.0f,-9.81f, 0.0f) * (float)delta * 0.5f;
 			    p.speed += glm::vec3(0.0f, 0.05f, 0.0f) * (float)delta;
