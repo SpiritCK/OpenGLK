@@ -43,14 +43,14 @@ const float GROUND_LEVEL = -0.02f;
 int FindUnusedParticle(){
 
 	for(int i=LastUsedParticle; i<MaxParticles; i++){
-		if (ParticlesContainer[i].life < 0){
+		if (ParticlesContainer[i].life < -10.0f){
 			LastUsedParticle = i;
 			return i;
 		}
 	}
 
 	for(int i=0; i<LastUsedParticle; i++){
-		if (ParticlesContainer[i].life < 0){
+		if (ParticlesContainer[i].life < -10.0f){
 			LastUsedParticle = i;
 			return i;
 		}
@@ -109,7 +109,7 @@ int main( void )
     glfwSetCursorPos(window, 1024/2, 768/2);
 
 	// Dark blue background
-	glClearColor(0.0f, 0.0f, 0.2f, 0.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
 	// Enable depth test
 	glEnable(GL_DEPTH_TEST);
@@ -137,7 +137,7 @@ int main( void )
 	static GLubyte* g_particule_color_data         = new GLubyte[MaxParticles * 4];
 
 	for(int i=0; i<MaxParticles; i++){
-		ParticlesContainer[i].life = -1.0f;
+		ParticlesContainer[i].life = -11.0f;
 		ParticlesContainer[i].cameradistance = -1.0f;
 	}
 
@@ -148,10 +148,10 @@ int main( void )
 	// The VBO containing the 4 vertices of the particles.
 	// Thanks to instancing, they will be shared by all particles.
 	static const GLfloat g_vertex_buffer_data[] = { 
-		 -0.0014f, -0.006f, 0.0f,
-		  0.0014f, -0.006f, 0.0f,
-		 -0.0014f,  0.006f, 0.0f,
-		  0.0014f,  0.006f, 0.0f,
+		 -0.002f, -0.004f, 0.0f,
+		  0.002f, -0.004f, 0.0f,
+		 -0.002f,  0.004f, 0.0f,
+		  0.002f,  0.004f, 0.0f,
 	};
 	GLuint billboard_vertex_buffer;
 	glGenBuffers(1, &billboard_vertex_buffer);
@@ -202,13 +202,13 @@ int main( void )
 		// Generate 100 new particule each millisecond,
 		// but limit this to 16 ms (60 fps), or if you have 1 long frame (1sec),
 		// newparticles will be huge and the next frame even longer.
-		int newparticles = (int)(delta*3000.0);
+		int newparticles = (int)(delta*1000.0);
 		if (newparticles > (int)(0.016f*10000.0))
 			newparticles = (int)(0.016f*10000.0);
 		
 		for(int i=0; i<newparticles; i++){
 			int particleIndex = FindUnusedParticle();
-			ParticlesContainer[particleIndex].life = 5.0f; // This particle will live 5 seconds.
+			ParticlesContainer[particleIndex].life = 10.0f; // This particle will live 5 seconds.
       float randomX = (float)(rand()%2000 - 1000.0f)/1000.0f;
       float randomZ = (float)(rand()%2000 - 1000.0f)/1000.0f;
 			ParticlesContainer[particleIndex].pos = glm::vec3(randomX, 0.8, randomZ);
@@ -220,11 +220,11 @@ int main( void )
                   );
 			ParticlesContainer[particleIndex].speed = temp * 1.5f * 0.015f;
 
-			// Very bad way to generate a random color
-			ParticlesContainer[particleIndex].r = 64;//rand() % 256;
-			ParticlesContainer[particleIndex].g = 164;//rand() % 256;
-			ParticlesContainer[particleIndex].b = 223;//rand() % 256;
-			ParticlesContainer[particleIndex].a = 64;//(rand() % 256) / 3;
+			// water color
+			ParticlesContainer[particleIndex].r = 254;
+			ParticlesContainer[particleIndex].g = 254;
+			ParticlesContainer[particleIndex].b = 254;
+			ParticlesContainer[particleIndex].a = 64;
 
 			ParticlesContainer[particleIndex].size = (rand()%1000)/2000.0f + 0.1f;
 			
@@ -267,6 +267,27 @@ int main( void )
 					g_particule_color_data[4*ParticlesCount+3] = p.a;
 
 				} 
+        else //after collision effect
+        if (p.life > -10.0f) {
+          float temp1 = ((float)(rand() % 100) - 50) / 10000; 
+          float temp2 = ((float)(rand() % 100) - 50) / 10000;
+          //printf("%.4f\n",temp1); 
+          vec3 gg = glm::vec3(temp1, 0.005f - (p.life / 100), temp2);
+          p.pos += gg;
+          p.cameradistance = glm::length2( p.pos - CameraPosition );
+
+          // Fill the GPU buffer
+          g_particule_position_size_data[4*ParticlesCount+0] = p.pos.x;
+          g_particule_position_size_data[4*ParticlesCount+1] = p.pos.y;
+          g_particule_position_size_data[4*ParticlesCount+2] = p.pos.z;
+                           
+          g_particule_position_size_data[4*ParticlesCount+3] = p.size;
+                           
+          g_particule_color_data[4*ParticlesCount+0] = p.r;
+          g_particule_color_data[4*ParticlesCount+1] = p.g;
+          g_particule_color_data[4*ParticlesCount+2] = p.b;
+          g_particule_color_data[4*ParticlesCount+3] = p.a;
+        }
         else {
           // Particles that just died will be put at the end of the buffer in SortParticles();
           p.cameradistance = -1.0f;
