@@ -109,7 +109,7 @@ int main( void )
     glfwSetCursorPos(window, 1024/2, 768/2);
 
 	// Dark blue background
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClearColor(0.0f, 0.0f, 0.2f, 0.0f);
 
 	// Enable depth test
 	glEnable(GL_DEPTH_TEST);
@@ -199,23 +199,23 @@ int main( void )
 		glm::mat4 ViewProjectionMatrix = ProjectionMatrix * ViewMatrix;
 
 
-		// Generate 10 new particule each millisecond,
+		// Generate 100 new particule each millisecond,
 		// but limit this to 16 ms (60 fps), or if you have 1 long frame (1sec),
 		// newparticles will be huge and the next frame even longer.
-		int newparticles = (int)(delta*1000.0);
+		int newparticles = (int)(delta*3000.0);
 		if (newparticles > (int)(0.016f*10000.0))
 			newparticles = (int)(0.016f*10000.0);
 		
 		for(int i=0; i<newparticles; i++){
 			int particleIndex = FindUnusedParticle();
-			ParticlesContainer[particleIndex].life = 10.0f; // This particle will live 5 seconds.
+			ParticlesContainer[particleIndex].life = 5.0f; // This particle will live 5 seconds.
       float randomX = (float)(rand()%2000 - 1000.0f)/1000.0f;
       float randomZ = (float)(rand()%2000 - 1000.0f)/1000.0f;
-			ParticlesContainer[particleIndex].pos = glm::vec3(randomX, 0.4, randomZ);
+			ParticlesContainer[particleIndex].pos = glm::vec3(randomX, 0.8, randomZ);
 
       vec3 temp = glm::vec3(
                     0.0f,
-                    (rand()%2000 - 1000.0f)/50.0f,
+                    (rand()%2000 - 1000.0f)/1000.0f,
                     0.0f
                   );
 			ParticlesContainer[particleIndex].speed = temp * 1.5f * 0.015f;
@@ -248,9 +248,9 @@ int main( void )
 				if (p.life > 0.0f){
 					// Simulate simple physics : gravity only, no collisions
 					//p.speed += glm::vec3(0.0f,-9.81f, 0.0f) * (float)delta * 0.5f;
-			    p.speed += glm::vec3(0.0f, 0.05f, 0.0f) * (float)delta;
+			    p.speed += glm::vec3(0.0f, 0.005f, 0.0f) * (float)delta;
 					//p.pos -= p.speed * (float)delta;
-          p.pos.y -= 0.012f;
+          p.pos -= p.speed;
 					p.cameradistance = glm::length2( p.pos - CameraPosition );
 					//ParticlesContainer[i].pos += glm::vec3(0.0f,10.0f, 0.0f) * (float)delta;
 
@@ -266,10 +266,11 @@ int main( void )
 					g_particule_color_data[4*ParticlesCount+2] = p.b;
 					g_particule_color_data[4*ParticlesCount+3] = p.a;
 
-				}else{
-					// Particles that just died will be put at the end of the buffer in SortParticles();
-					p.cameradistance = -1.0f;
-				}
+				} 
+        else {
+          // Particles that just died will be put at the end of the buffer in SortParticles();
+          p.cameradistance = -1.0f;
+        }
 
 				ParticlesCount++;
 
