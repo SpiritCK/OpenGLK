@@ -55,7 +55,7 @@ Particle SmokeParticlesContainer[MaxParticles];
 Particle RainParticlesContainer[MaxParticles];
 int LastUsedSmokeParticle = 0;
 int LastUsedRainParticle = 0;
-const float GROUND_LEVEL = -0.4f;
+const float GROUND_LEVEL = -0.35f;
 
 // Finds a Particle in SmokeParticlesContainer which isn't used yet.
 // (i.e. life < 0);
@@ -640,7 +640,8 @@ int main( void )
 			if(p.life > 0.0f){
 				//check collision, put particle to death if collide
 				if (p.pos.y <= GROUND_LEVEL || collideCar(p.pos)) {
-					p.life = 0.0f;
+					p.speed.y = -1.5*p.speed.y;
+					p.life = 0.07f;
 				}
 				// Decrease life
 				p.life -= delta;
