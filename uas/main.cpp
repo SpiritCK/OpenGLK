@@ -102,6 +102,25 @@ void SortRainParticles(){
 	std::sort(&RainParticlesContainer[0], &RainParticlesContainer[MaxParticles]);
 }
 
+bool collideCar(vec3 pos){
+	if(pos.x >= -1.13 && pos.x < -0.7 && abs(pos.z) <= 0.43){
+		return pos.y <= (0.279*pos.x)+0.41527;
+	}
+	else if(pos.x >= -0.7 && pos.x < -0.23 && abs(pos.z) <= ((-0,17*pos.x)+0,311)){
+		return pos.y <= (0.447*pos.x)+0.533;
+	}
+	else if(pos.x >= -0.23 && pos.x < 0.43 && abs(pos.z) <= 0.35){
+		return pos.y <= (0.03*pos.x)+0.4369;
+	}
+	else if(pos.x >= 0.43 && pos.x < 1.0 && abs(pos.z) <= ((0.158*pos.x)+0.282)){
+		return pos.y <= (-0.33*pos.x)+0.592;
+	}
+	else if(pos.x >= 1.0 && pos.x < 1.2 && abs(pos.z) <= 0.44){
+		return pos.z <= (-0.1*pos.x)+0.36;
+	}
+	else return false;
+}
+
 int main( void )
 {
 	// Initialise GLFW
@@ -619,7 +638,7 @@ int main( void )
 
 			if(p.life > 0.0f){
 				//check collision, put particle to death if collide
-				if (p.pos.y <= GROUND_LEVEL) {
+				if (p.pos.y <= GROUND_LEVEL || collideCar(p.pos)) {
 					p.life = 0.0f;
 				}
 				// Decrease life
