@@ -107,7 +107,7 @@ bool collideCar(vec3 pos){
 	if(pos.x >= -1.13 && pos.x < -0.7 && abs(pos.z) <= 0.43){
 		return pos.y <= (0.279*pos.x)+0.41527;
 	}
-	else if(pos.x >= -0.7 && pos.x < -0.23 && abs(pos.z) <= ((-0,17*pos.x)+0,311)){
+	else if(pos.x >= -0.7 && pos.x < -0.23 && abs(pos.z) <= ((-0.17*pos.x)+0.311)){
 		return pos.y <= (0.447*pos.x)+0.533;
 	}
 	else if(pos.x >= -0.23 && pos.x < 0.43 && abs(pos.z) <= 0.35){
