@@ -287,10 +287,10 @@ int main( void )
 	// The VBO containing the 4 vertices of the particles.
 	// Thanks to instancing, they will be shared by all particles.
 	static const GLfloat rain_g_vertex_buffer_data[] = {
-		 -0.004f, -0.008f, 0.0f,
-			0.004f, -0.008f, 0.0f,
-		 -0.004f,  0.008f, 0.0f,
-			0.004f,  0.008f, 0.0f,
+		 -0.008f, -0.016f, 0.0f,
+			0.008f, -0.016f, 0.0f,
+		 -0.008f,  0.016f, 0.0f,
+			0.008f,  0.016f, 0.0f,
 	};
 	GLuint rain_billboard_vertex_buffer;
 	glGenBuffers(1, &rain_billboard_vertex_buffer);
@@ -588,9 +588,9 @@ int main( void )
 		for(int i=0; i<newrainparticles; i++){
 			int particleIndex = FindUnusedRainParticle();
 			RainParticlesContainer[particleIndex].life = 10.0f; // This particle will live 5 seconds.
-			float randomX = (float)(rand()%2000 - 1000.0f)/1000.0f;
-			float randomZ = (float)(rand()%2000 - 1000.0f)/1000.0f;
-			RainParticlesContainer[particleIndex].pos = glm::vec3(randomX, 0.8, randomZ);
+			float randomX = (float)(rand()%2000 - 1000.0f)/500.0f;
+			float randomZ = (float)(rand()%2000 - 1000.0f)/500.0f;
+			RainParticlesContainer[particleIndex].pos = glm::vec3(randomX, 3, randomZ);
 
 			vec3 temp = glm::vec3(
 										0.0f,
