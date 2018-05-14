@@ -33,6 +33,7 @@ using namespace glm;
 #define RAIN_PARTICLE_FRAGMENT_SHADER_FILE "uas/shader/RainParticle.fragmentshader"
 #define MODEL_FILE "uas/test.obj"
 #define TEXTURE_FILE "uas/1lexus.dds"
+#define RAIN_TEXTURE_FILE "uas/particle.DDS"
 #define MAX_PARTICLE 50000
 
 // CPU representation of a particle
@@ -301,7 +302,7 @@ int main( void )
 
 
 
-	GLuint rain_Texture = loadDDS("tutorial18/particle.DDS");
+	GLuint rain_Texture = loadDDS(RAIN_TEXTURE_FILE);
 
 	// The VBO containing the 4 vertices of the particles.
 	// Thanks to instancing, they will be shared by all particles.
