@@ -79,7 +79,15 @@ void SortParticles(Particle container[], int max){
 	std::sort(&container[0], &container[max]);
 }
 
-bool isHitCar(vec3 &pos) {
+bool collideGround(vec3 &pos) {
+  if (pos.y < -0.35f) {
+    pos.y = -0.35f;
+    return true;
+  }
+  return false;
+}
+
+bool collideCar(vec3 &pos) {
   if (pos.x > -1.13f && pos.x < -0.7f && pos.z < 0.43f && pos.z > -0.43f && (1.2f*pos.x - 4.3f*pos.y + 1.786f) > 0) {
     pos.y = (1.2f*pos.x + 1.786f) / 4.3f;
     return true;
@@ -263,20 +271,20 @@ int main( void )
 	// The VBO containing the 4 vertices of the particles.
 	// Thanks to instancing, they will be shared by all particles.
 	static const GLfloat g_rain_vertex_buffer_data[] = { 
-		 -0.005f, -0.01f, -0.005f,
-		  0.005f, -0.01f, -0.005f,
-		 -0.005f,  0.01f, -0.005f,
-		  0.005f,  0.01f, -0.005f,
-		  0.005f,  0.01f,  0.005f,
-		  0.005f, -0.01f, -0.005f,
-		  0.005f, -0.01f,  0.005f,
-		 -0.005f, -0.01f, -0.005f,
-		 -0.005f, -0.01f,  0.005f,
-		 -0.005f,  0.01f, -0.005f,
-		 -0.005f,  0.01f,  0.005f,
-		  0.005f,  0.01f,  0.005f,
-		 -0.005f, -0.01f,  0.005f,
-		  0.005f, -0.01f,  0.005f,
+		 -0.008f, -0.016f, -0.008f,
+		  0.008f, -0.016f, -0.008f,
+		 -0.008f,  0.016f, -0.008f,
+		  0.008f,  0.016f, -0.008f,
+		  0.008f,  0.016f,  0.008f,
+		  0.008f, -0.016f, -0.008f,
+		  0.008f, -0.016f,  0.008f,
+		 -0.008f, -0.016f, -0.008f,
+		 -0.008f, -0.016f,  0.008f,
+		 -0.008f,  0.016f, -0.008f,
+		 -0.008f,  0.016f,  0.008f,
+		  0.008f,  0.016f,  0.008f,
+		 -0.008f, -0.016f,  0.008f,
+		  0.008f, -0.016f,  0.008f,
 	};
 	
 	GLuint billboard_vertex_buffer;
@@ -577,9 +585,9 @@ int main( void )
 			int particleIndex = FindUnusedParticle(RainContainer, LastUsedRain, MAX_PARTICLE_RAIN);
 			RainContainer[particleIndex].life = 5.0f; // This particle will live 5 seconds.
 			RainContainer[particleIndex].pos = glm::vec3(
-				(rand()%2000 - 1000.0f)/1000.0f * 1.5f,
-				(rand()%2000 - 1000.0f)/10000.0f + 1.3f,
-				(rand()%2000 - 1000.0f)/1000.0f * 1.5f
+				(rand()%2000 - 1000.0f)/1000.0f * 2.0f,
+				(rand()%2000 - 1000.0f)/10000.0f + 2.5f,
+				(rand()%2000 - 1000.0f)/1000.0f * 2.0f
 			);
 
 			glm::vec3 maindir = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -591,12 +599,12 @@ int main( void )
 			
 			RainContainer[particleIndex].speed = (maindir + randomdir) * 0.015f;
 
-			RainContainer[particleIndex].r = 10;
-			RainContainer[particleIndex].g = 10;
-			RainContainer[particleIndex].b = 255;
-			RainContainer[particleIndex].a = 160;
+			RainContainer[particleIndex].r = 254;
+			RainContainer[particleIndex].g = 254;
+			RainContainer[particleIndex].b = 254;
+			RainContainer[particleIndex].a = 64;
 
-			RainContainer[particleIndex].size = (rand()%1000)/500.0f + 0.1f;
+			RainContainer[particleIndex].size = (rand()%1000)/2000.0f + 0.1f;
 			
 		}
 
@@ -611,22 +619,27 @@ int main( void )
 				// Decrease life
 				p.life -= delta;
 				if (p.pos.y < -1.5f)
-				  p.life = -1.0f;
+				  p.life = -0.5f;
 				if (p.life > 0.0f){
 
 					// Simulate simple physics : gravity only, no collisions
 					p.speed += glm::vec3(0.0f,-9.18f, 0.0f) * (float)delta * 0.5f;
 			    p.pos += p.speed * (float)delta;
-			    if (isHitCar(p.pos)) {
-			      p.speed *= -0.3f;
-			      float spread = 1.5f;
-			      glm::vec3 randomdir = glm::vec3(
-				      (rand()%2000 - 1000.0f)/5000.0f,
-				      (rand()%2000 - 1000.0f)/5000.0f + 0.2f,
-				      (rand()%2000 - 1000.0f)/5000.0f
-			      );
-			      p.speed += randomdir*spread;
-			      p.life = (p.life < 1.0f) ? p.life : 1.0f;
+			    if (collideCar(p.pos) || collideGround(p.pos)) {
+			      if (rand()%3 != 0) {
+			        p.speed *= -0.2f;
+			        float spread = 1.5f;
+			        glm::vec3 randomdir = glm::vec3(
+				        (rand()%2000 - 1000.0f)/5000.0f,
+				        (rand()%2000 - 1000.0f)/5000.0f + 0.2f,
+				        (rand()%2000 - 1000.0f)/5000.0f
+			        );
+			        p.speed += randomdir*spread;
+			        p.life = (p.life < 1.0f) ? p.life : 1.0f;
+			      }
+			      else {
+			        p.life = -1.0f;
+			      }
 			    }
 					p.cameradistance = glm::length2( p.pos - CameraPosition );
 					//RainContainer[i].pos += glm::vec3(0.0f,10.0f, 0.0f) * (float)delta;
